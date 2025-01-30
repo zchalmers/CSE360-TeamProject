@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import application.User;
@@ -27,6 +30,8 @@ public class DatabaseHelper {
 	private Statement statement = null; 
 	//	PreparedStatement pstmt
 
+	User currentUser;
+	
 	public void connectToDatabase() throws SQLException {
 		try {
 			
@@ -45,18 +50,20 @@ public class DatabaseHelper {
 		}
 	}
 
+	// TODO: update for new user class
 	private void createTables() throws SQLException {
 		String userTable = "CREATE TABLE IF NOT EXISTS cse360users ("
 				+ "id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "userName VARCHAR(255) UNIQUE, "
 				+ "password VARCHAR(255), "
-				+ "role VARCHAR(20))";
+				+ "roles VARCHAR(50))";
 		statement.execute(userTable);
 		
 		// Create the invitation codes table
 	    String invitationCodesTable = "CREATE TABLE IF NOT EXISTS InvitationCodes ("
 	            + "code VARCHAR(10) PRIMARY KEY, "
 	            + "isUsed BOOLEAN DEFAULT FALSE)";
+	    // TODO: could put timeStamp for invalidating invitationCode
 	    statement.execute(invitationCodesTable);
 	}
 
@@ -71,9 +78,10 @@ public class DatabaseHelper {
 		return true;
 	}
 
+	// TODO: update for new user class
 	// Registers a new user in the database.
 	public void register(User user) throws SQLException {
-		String insertUser = "INSERT INTO cse360users (userName, password, role) VALUES (?, ?, ?)";
+		String insertUser = "INSERT INTO cse360users (userName, password, roles) VALUES (?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
 			pstmt.setString(1, user.getUserName());
 			pstmt.setString(2, user.getPassword());
@@ -81,15 +89,156 @@ public class DatabaseHelper {
 			pstmt.executeUpdate();
 		}
 	}
+	
+	public void updateRoles(User user) throws SQLException {
+		String insertUser = "UPDATE cse360users SET roles = ? WHERE username = ?";
+		
+		//String rolesString = rolesDeserial(user.getRole());
+		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
+			pstmt.setString(1, user.getRole());    // update for USER class
+			pstmt.setString(2, user.getUserName());
+			pstmt.executeUpdate();
+		}
+	}
+	// TODO: update for new user class
+	public User getUser(String username) throws SQLException {
+		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+			pstmt.setString(0, username);
+	        ResultSet rs = pstmt.executeQuery();
 
+			if (rs.next()) {
+				String password = rs.getString("password");
+				List<String> roles = rolesDeserial(rs.getString("roles"));
+				return new User(username, password, roles);
+			}
+		}
+		return null;
+	}
+	
+	// TODO: update for new user class
+	public boolean addRoles(String username, String newRole) throws SQLException {
+		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+			pstmt.setString(0, username);
+	        ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				String password = rs.getString("password");
+				List<String> roles = rolesDeserial(rs.getString("roles"));
+				if (!roles.contains(newRole)) {
+					roles.add(newRole);
+					
+					String rolesString = rolesSerial(roles); 
+					try {
+						updateRoles(new User(username, password, roles)); // update for roles list, update register for rolesList
+						return true;
+					}
+					catch (SQLException e) {
+						System.out.println(e.getMessage() + "\n" + "ERROR IN ADDROLES/REGISTER");
+						return false;
+					}
+					
+				}
+				else {
+					System.out.println("ADDROLES: User already has this role");
+					return false;
+				}
+				
+			}
+			System.out.println("ADDROLES: User was not found");
+			return false;
+		}
+	}
+	
+	public boolean removeRoles(String username, String newRole) throws SQLException {
+		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
+		if (!username.equals(currentUser.getUserName())) {
+			
+			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+				pstmt.setString(0, username);
+				ResultSet rs = pstmt.executeQuery();
+	        
+				if (rs.next()) {
+					String password = rs.getString("password");
+					List<String> roles = rolesDeserial(rs.getString("roles"));
+				
+					if (roles.contains(newRole)) {
+						roles.remove(roles.indexOf(newRole));  // possible to delete last role
+					
+						String rolesString = rolesSerial(roles);
+						try {
+							updateRoles(new User(username, password, roles));
+							return true;
+						}
+						catch (SQLException e) {
+							System.out.println(e.getMessage() + "\n" + "ERROR IN REMOVEROLES/REGISTER");
+							return false;
+						}
+					}
+					else {
+						System.out.println("REMOVEROLES: User does not have this role");
+						return false;
+					}
+				}
+				else {
+					System.out.println("REMOVEROLES: User was not found");
+				}
+			}
+		}
+		System.out.println("REMOVEROLES: You cannot remove your own roles");
+		return false;
+	}
+	
+	public boolean deleteUser(String username) throws SQLException {
+		if (!username.equals(currentUser.getUserName())) {
+			
+			String query = "DELETE FROM cse360users AS c WHERE c.username = ?";
+			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+				pstmt.setString(0, username);
+	        
+				if (pstmt.executeUpdate() > 0) {
+					System.out.println("DELETEUSER: User successfully deleted");
+					return true; 
+				}
+				System.out.println("DELETEUSER: User was not found");
+				return false;
+			}
+		}
+		System.out.println("DELETEUSER: You cannot delete yourself");
+		return false;
+	}
+	
+	// TODO: update for new user class
+	public List<User> getAllUsers() throws SQLException {
+		String query = "SELECT * FROM cse360users";
+		List<User> users = new ArrayList<>();
+		
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+			ResultSet rs = pstmt.executeQuery(); 
+			
+			while (rs.next()) {
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				List<String> roles = rolesDeserial(rs.getString("roles"));
+				
+				User user = new User(username, password, roles);
+				users.add(user);
+			}
+		}
+		return users;
+	}
+	
+	// TODO: update for new user class
 	// Validates a user's login credentials.
 	public boolean login(User user) throws SQLException {
-		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? AND role = ?";
+		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? AND roles = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			pstmt.setString(1, user.getUserName());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getRole());
 			try (ResultSet rs = pstmt.executeQuery()) {
+				currentUser = user;
 				return rs.next();
 			}
 		}
@@ -115,13 +264,13 @@ public class DatabaseHelper {
 	
 	// Retrieves the role of a user from the database using their UserName.
 	public String getUserRole(String userName) {
-	    String query = "SELECT role FROM cse360users WHERE userName = ?";
+	    String query = "SELECT roles FROM cse360users WHERE userName = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setString(1, userName);
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        if (rs.next()) {
-	            return rs.getString("role"); // Return the role if user exists
+	            return rs.getString("roles"); // Return the role if user exists
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -172,6 +321,14 @@ public class DatabaseHelper {
 	    }
 	}
 
+	private List<String> rolesDeserial(String roles) {
+		return Arrays.asList(roles.split(","));
+	}
+	
+	private String rolesSerial(List<String> roles) {
+		return String.join(",", roles);
+	}
+	
 	// Closes the database connection and statement.
 	public void closeConnection() {
 		try{ 
