@@ -34,4 +34,5 @@ public class User {
     public String getUserName() { return userName; }
     public String getPassword() { return password; }
     public String getRole() { return role; }
+    public List<String> getRoles() { return roles; }
 }
