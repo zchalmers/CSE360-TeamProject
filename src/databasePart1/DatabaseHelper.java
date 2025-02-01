@@ -264,18 +264,41 @@ public class DatabaseHelper {
 	
 	// Retrieves the role of a user from the database using their UserName.
 	public String getUserRole(String userName) {
-	    String query = "SELECT roles FROM cse360users WHERE userName = ?";
+		if (this.connection == null) { //Ensure connection is not null
+	        try {
+	            connectToDatabase();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
+	    String query = "SELECT role FROM cse360users WHERE userName = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setString(1, userName);
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        if (rs.next()) {
-	            return rs.getString("roles"); // Return the role if user exists
+	            return rs.getString("role"); // Return the role if user exists
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
 	    return null; // If no user exists or an error occurs
+	}
+	
+	//MODIFIED Version of getUserRole (Counting roles)
+	public int getUserRolesCount(String userName) {
+		String query = "SELECT COUNT(DISTINCT role) FROM cse360users WHERE userName = ?";
+				try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+					pstmt.setString(1, userName);
+					ResultSet rs = pstmt.executeQuery();
+					if (rs.next()) {
+						return rs.getInt(1); // Returns the number of roles the user has
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		return 0; //Default return in case of an error 
 	}
 	
 	// Generates a new invitation code and inserts it into the database.
