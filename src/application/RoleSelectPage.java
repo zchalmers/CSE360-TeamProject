@@ -48,8 +48,7 @@ public class RoleSelectPage {
 	    // ComboBox allows selection of roles. Deactivates Next button until selection is made
 	    comboBox.setOnAction(a -> {
 	    	selectedRole = comboBox.getValue();
-	    	if (selectedRole != null && selectedRole != "Student" && selectedRole != "Instructor"
-	    			&& selectedRole != "Staff" && selectedRole != "Reviewer") {
+	    	if (selectedRole != null) {
 	    		nextButton.setDisable(false);
 	    	} else {
 	    		nextButton.setDisable(true);
@@ -57,22 +56,23 @@ public class RoleSelectPage {
 	    });
 	    
 	    // Next button to proceed with selection. Is inactive unless selection is made in ComboBox
+	    // Based on role selected, go to that role's home page.
 	    nextButton.setOnAction(a -> {
 	    	switch(selectedRole) {
-	    		case "Admin":
+	    		case "admin":
 	    			new AdminHomePage(databaseHelper).show(primaryStage);
 	    			break;
-	    		case "Student":
-	    			// Add Student home page
+	    		case "student":
+	    			new StudentHomePage(/*databaseHelper*/).show(primaryStage);
 	    			break;
-	    		case "Instructor":
-	    			// Add Instructor home page
+	    		case "instructor":
+	    			new InstructorHomePage(/*databaseHelper*/).show(primaryStage);
 	    			break;
-	    		case "Staff":
-	    			// Add Staff home page
+	    		case "staff":
+	    			new StaffHomePage(/*databaseHelper*/).show(primaryStage);
 	    			break;
-	    		case "Reviewer":
-	    			// Add Reviewer home page
+	    		case "reviewer":
+	    			new ReviewerHomePage(/*databaseHelper*/).show(primaryStage);
 	    			break;	    			
 	    	}
 	    });
@@ -84,10 +84,10 @@ public class RoleSelectPage {
 
 	    // Attach buttons and combobox to layout
 	    layout.getChildren().addAll(comboBox, nextButton, quitButton);
-	    Scene RoleSelectScene = new Scene(layout, 800, 400);
+	    Scene roleSelectScene = new Scene(layout, 800, 400);
 
 	    // Set the scene to primary stage
-	    primaryStage.setScene(RoleSelectScene);
+	    primaryStage.setScene(roleSelectScene);
 	    primaryStage.setTitle("Role-Selection Page");
     }
 }
