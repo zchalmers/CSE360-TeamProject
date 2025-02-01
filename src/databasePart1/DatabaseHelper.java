@@ -30,7 +30,7 @@ public class DatabaseHelper {
 	private Statement statement = null; 
 	//	PreparedStatement pstmt
 
-	User currentUser;
+	public User currentUser;
 	
 	public void connectToDatabase() throws SQLException {
 		try {
@@ -41,8 +41,8 @@ public class DatabaseHelper {
 
 			statement = connection.createStatement(); 
 			// You can use this command to clear the database and restart from fresh.
-			statement.execute("DROP ALL OBJECTS");
-		    System.out.println("Database cleared successfully.");
+			//statement.execute("DROP ALL OBJECTS");
+		    //System.out.println("Database cleared successfully.");
 
 			createTables();  // Create the necessary tables if they don't exist
 		} catch (ClassNotFoundException e) {
@@ -83,7 +83,7 @@ public class DatabaseHelper {
 	public void register(User user) throws SQLException {
 		String insertUser = "INSERT INTO cse360users (userName, password, roles) VALUES (?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
-			pstmt.setString(1, user.getUserName());
+			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getRole());
 			pstmt.executeUpdate();
@@ -96,7 +96,7 @@ public class DatabaseHelper {
 		//String rolesString = rolesDeserial(user.getRole());
 		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
 			pstmt.setString(1, user.getRole());    // update for USER class
-			pstmt.setString(2, user.getUserName());
+			pstmt.setString(2, user.getUsername());
 			pstmt.executeUpdate();
 		}
 	}
@@ -153,7 +153,7 @@ public class DatabaseHelper {
 	
 	public boolean removeRoles(String username, String newRole) throws SQLException {
 		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
-		if (!username.equals(currentUser.getUserName())) {
+		if (!username.equals(currentUser.getUsername())) {
 			
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 				pstmt.setString(0, username);
@@ -190,12 +190,12 @@ public class DatabaseHelper {
 		return false;
 	}
 	
-	public boolean deleteUser(String username) throws SQLException {
-		if (!username.equals(currentUser.getUserName())) {
+	public boolean deleteUser(String username)  {
+		if (!username.equals(currentUser.getUsername())) {
 			
 			String query = "DELETE FROM cse360users AS c WHERE c.username = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-				pstmt.setString(0, username);
+				pstmt.setString(1, username);
 	        
 				if (pstmt.executeUpdate() > 0) {
 					System.out.println("DELETEUSER: User successfully deleted");
@@ -204,6 +204,10 @@ public class DatabaseHelper {
 				System.out.println("DELETEUSER: User was not found");
 				return false;
 			}
+		  catch (SQLException e) {
+	            System.err.println("DELETEUSER: SQL Error - " + e.getMessage());
+	            return false;
+	        }
 		}
 		System.out.println("DELETEUSER: You cannot delete yourself");
 		return false;
@@ -223,6 +227,7 @@ public class DatabaseHelper {
 				List<String> roles = rolesDeserial(rs.getString("roles"));
 				
 				User user = new User(username, password, roles);
+				System.out.println("USERS: " + user.toString());
 				users.add(user);
 			}
 		}
@@ -234,7 +239,7 @@ public class DatabaseHelper {
 	public boolean login(User user) throws SQLException {
 		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? AND roles = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-			pstmt.setString(1, user.getUserName());
+			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getRole());
 			try (ResultSet rs = pstmt.executeQuery()) {
