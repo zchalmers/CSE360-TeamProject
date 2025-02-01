@@ -39,7 +39,7 @@ public class InvitationPage {
         showCodeButton.setOnAction(a -> {
         	// Generate the invitation code using the databaseHelper and set it to the label
             String invitationCode = databaseHelper.generateInvitationCode();
-            inviteCodeLabel.setText(invitationCode);
+            inviteCodeLabel.setText(invitationCode + " - Code will expire in 15 minutes.");
         });
 	    
 
