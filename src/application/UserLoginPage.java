@@ -42,23 +42,6 @@ public class UserLoginPage {
         	// Retrieve user inputs
             String userName = userNameField.getText();
             String password = passwordField.getText();
-
-            String userNameValidate = UserNameRecognizer.checkForValidUserName(userName); // Using FSM to validate Username
-            String passwordValidate = PasswordEvaluator.evaluatePassword(password);       // Using FSM to validate Password
-            
-            if (!userNameValidate.isEmpty()) {  // if there is no error then username is valid
-            	userNameValidate = "Username Error:" + userNameValidate;   // make it more descriptive
-            	errorLabel.setText(userNameValidate);      // set the errorlabel for username error
-            	return;
-            }
-            
-            if (!passwordValidate.isEmpty()) {
-            	passwordValidate = "Password Error: \n" + passwordValidate;
-            	errorLabel.setText(passwordValidate);
-        		return;
-            }
-            
-            
             try {
             	User user=new User(userName, password, "");
             	WelcomeLoginPage welcomeLoginPage = new WelcomeLoginPage(databaseHelper);
@@ -70,8 +53,16 @@ public class UserLoginPage {
             		user.setRole(role);
             		if(databaseHelper.login(user)) {
             			welcomeLoginPage.show(primaryStage,user);
-            		}
-            		else {
+            			if (role.equalsIgnoreCase("Admin")) {
+                            // Redirect to AdminHomePage
+                            new AdminHomePage().show(primaryStage);
+                        } else if (databaseHelper.getUserRolesCount(userName) ==1) {
+            				//If the user has only one role, take them directly to their home screen
+            				new UserHomePage(user).show(primaryStage);
+            			} else {
+            				new RoleSelectPage(databaseHelper).show(primaryStage);
+            			}
+            		} else {
             			// Display an error if the login fails
                         errorLabel.setText("Error logging in");
             		}
