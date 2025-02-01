@@ -63,7 +63,7 @@ public class DatabaseHelper {
 	    String invitationCodesTable = "CREATE TABLE IF NOT EXISTS InvitationCodes ("
 	            + "code VARCHAR(10) PRIMARY KEY, "
 	            + "isUsed BOOLEAN DEFAULT FALSE)";
-	    // TODO: could put timeStamp for invalidating invitationCode
+		    + "generatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 	    statement.execute(invitationCodesTable);
 	}
 
@@ -286,7 +286,7 @@ public class DatabaseHelper {
 	// Generates a new invitation code and inserts it into the database.
 	public String generateInvitationCode() {
 	    String code = UUID.randomUUID().toString().substring(0, 4); // Generate a random 4-character code
-	    String query = "INSERT INTO InvitationCodes (code) VALUES (?)";
+	    String query = "INSERT INTO InvitationCodes (code, generatedDate) VALUES (?, CURRENT_TIMESTAMP)";
 	    System.out.println(code);
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setString(1, code);
@@ -300,7 +300,8 @@ public class DatabaseHelper {
 	
 	// Validates an invitation code to check if it is unused.
 	public boolean validateInvitationCode(String code) {
-	    String query = "SELECT * FROM InvitationCodes WHERE code = ? AND isUsed = FALSE";
+	    String query = "SELECT * FROM InvitationCodes WHERE code = ? AND isUsed = FALSE AND generatedDate >= DATEADD('MINUTE', -15, CURRENT_TIMESTAMP)";
+		// If expiration date is changed, make sure to update expiration label in InvitationPage with new time limit
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setString(1, code);
 	        ResultSet rs = pstmt.executeQuery();
