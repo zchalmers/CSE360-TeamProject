@@ -23,7 +23,7 @@ public class UserLoginPage {
     
     //Method to include direction to the necessary role pages
     private void roleHomePage(User user, Stage primaryStage) {
-    	switch (user.getRole().toLowerCase()) {
+    	switch (user.getRoles().get(0).toLowerCase()) {
     	case "admin":
     		new AdminHomePage(databaseHelper).show(primaryStage);
     		break;
@@ -42,6 +42,11 @@ public class UserLoginPage {
     	
     	case "reviewer":
     		new ReviewerHomePage().show(primaryStage);
+    		break;
+    		
+    	default:
+            new UserHomePage().show(primaryStage);
+            break;
     	}
     }
 
@@ -85,24 +90,27 @@ public class UserLoginPage {
             
             try {
             	User user=new User(userName, password, "");
-            	WelcomeLoginPage welcomeLoginPage = new WelcomeLoginPage(databaseHelper);
             	
             	// Retrieve the user's role from the database using userName
             	String role = databaseHelper.getUserRole(userName);
             	
             	if(role!=null) {
-            		user.setRole(role);
             		if(databaseHelper.login(user)) {
-            			int roleCount = databaseHelper.getUserRolesCount(userName); //Count roles
-            			welcomeLoginPage.show(primaryStage,user);
-            			if (roleCount > 1) {
-            				// If multiple roles, go to RoleSelectPage
+            			//Access logged-in user info
+            			User currentUser = databaseHelper.currentUser;
+				
+            			if (currentUser != null && currentUser.getRoles().size() == 1) {
+            				// If the user has only one role, go directly to the home page
+            				roleHomePage(currentUser, primaryStage);
+					
+            			} else if (currentUser != null && currentUser.getRoles().size() > 1) {
+            				//If multiple roles, go to role selection
             				new RoleSelectPage(databaseHelper).show(primaryStage);
-            			} else if (roleCount == 1) {
-            				//If the user has only role, go to their home page
-            				roleHomePage(user, primaryStage);
-       
-            			}
+					
+            			} else {
+            				// Display an error if role information is invalid
+            				errorLabel.setText("Error retrieving user roles.");
+            			}		
             		}
             		else {
             			// Display an error if the login fails
