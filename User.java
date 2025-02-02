@@ -30,15 +30,9 @@ public class User {
     public void setRole(String role) {
     	this.role=role;
     }
-    
-    public void addRole(String role) {
-    	roles.add(role);
-    }
 
-    public String getUsername() { return userName; }
+    public String getUserName() { return userName; }
     public String getPassword() { return password; }
     public String getRole() { return role; }
-    public String getEmail() { return email;}
-    public String getName() { return name; }
     public List<String> getRoles() { return roles; }
 }
