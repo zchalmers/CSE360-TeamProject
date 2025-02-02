@@ -20,6 +20,35 @@ public class UserLoginPage {
     public UserLoginPage(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
     }
+    
+    //Method to include direction to the necessary role pages
+    private void roleHomePage(User user, Stage primaryStage) {
+    	switch (user.getRoles().get(0).toLowerCase()) {
+    	case "admin":
+    		new AdminHomePage(databaseHelper).show(primaryStage);
+    		break;
+    		
+    	case "student":
+    		new StudentHomePage().show(primaryStage);
+    		break;
+    	
+    	case "instructor":
+    		new InstructorHomePage().show(primaryStage);
+    		break;
+    	
+    	case "staff":
+    		new StaffHomePage().show(primaryStage);
+    		break;
+    	
+    	case "reviewer":
+    		new ReviewerHomePage().show(primaryStage);
+    		break;
+    		
+    	default:
+            new UserHomePage().show(primaryStage);
+            break;
+    	}
+    }
 
     public void show(Stage primaryStage) {
     	// Input field for the user's userName, password
@@ -61,15 +90,24 @@ public class UserLoginPage {
             
             try {
             	User user=new User(userName, password, "");
-            	WelcomeLoginPage welcomeLoginPage = new WelcomeLoginPage(databaseHelper);
             	
             	// Retrieve the user's role from the database using userName
             	String role = databaseHelper.getUserRole(userName);
             	
             	if(role!=null) {
-            		user.setRole(role);
             		if(databaseHelper.login(user)) {
-            			welcomeLoginPage.show(primaryStage,user);
+            			if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() == 1) {
+            				// If the user has only one role, go directly to the home page
+            				roleHomePage(databaseHelper.currentUser, primaryStage);
+					
+            			} else if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() > 1) {
+            				//If multiple roles, go to role selection
+            				new RoleSelectPage(databaseHelper).show(primaryStage);
+					
+            			} else {
+            				// Display an error if role information is invalid
+            				errorLabel.setText("Error retrieving user roles.");
+            			}		
             		}
             		else {
             			// Display an error if the login fails
