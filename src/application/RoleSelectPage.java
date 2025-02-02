@@ -5,6 +5,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 import databasePart1.DatabaseHelper;
 
 /**
@@ -54,33 +56,44 @@ public class RoleSelectPage {
 	    		nextButton.setDisable(true);
 	    	}
 	    });
+
+		// Next button to proceed with selection. Is inactive unless selection is made
+		// in ComboBox
+		// Based on role selected, go to that role's home page.
+		nextButton.setOnAction(a -> {
+			try {
+				switch (selectedRole) {
+				case "admin":
+					new AdminHomePage(databaseHelper).show(primaryStage);
+					break;
+				case "student":
+					new StudentHomePage(/* databaseHelper */).show(primaryStage);
+					break;
+				case "instructor":
+					new InstructorHomePage(/* databaseHelper */).show(primaryStage);
+					break;
+				case "staff":
+					new StaffHomePage(/* databaseHelper */).show(primaryStage);
+					break;
+				case "reviewer":
+					new ReviewerHomePage(/* databaseHelper */).show(primaryStage);
+					break;
+				}
+			} catch (SQLException e) {
+				System.err.println("Database error: " + e.getMessage());
+				e.printStackTrace();
+			}
+		});
 	    
-	    // Next button to proceed with selection. Is inactive unless selection is made in ComboBox
-	    // Based on role selected, go to that role's home page.
-	    nextButton.setOnAction(a -> {
-	    	switch(selectedRole) {
-	    		case "admin":
-	    			new AdminHomePage(databaseHelper).show(primaryStage);
-	    			break;
-	    		case "student":
-	    			new StudentHomePage(/*databaseHelper*/).show(primaryStage);
-	    			break;
-	    		case "instructor":
-	    			new InstructorHomePage(/*databaseHelper*/).show(primaryStage);
-	    			break;
-	    		case "staff":
-	    			new StaffHomePage(/*databaseHelper*/).show(primaryStage);
-	    			break;
-	    		case "reviewer":
-	    			new ReviewerHomePage(/*databaseHelper*/).show(primaryStage);
-	    			break;	    			
-	    	}
-	    });
-	    
-	    // Quit button to return to User Login Screen
-	    quitButton.setOnAction(a -> {
-	    	new UserLoginPage(databaseHelper).show(primaryStage);
-	    });	    
+		// Quit button to return to User Login Screen
+		quitButton.setOnAction(a -> {
+			try {
+				new UserLoginPage(databaseHelper).show(primaryStage);
+			} catch (SQLException e) {
+				System.err.println("Database error: " + e.getMessage());
+				e.printStackTrace();
+			}
+		});
 
 	    // Attach buttons and combobox to layout
 	    layout.getChildren().addAll(comboBox, nextButton, quitButton);
