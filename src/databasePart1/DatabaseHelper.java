@@ -30,7 +30,7 @@ public class DatabaseHelper {
 	private Statement statement = null; 
 	//	PreparedStatement pstmt
 
-	User currentUser;
+	public User currentUser;
 	
 	public void connectToDatabase() throws SQLException {
 		try {
@@ -264,13 +264,13 @@ public class DatabaseHelper {
 	
 	// Retrieves the role of a user from the database using their UserName.
 	public String getUserRole(String userName) {
-	    String query = "SELECT role FROM cse360users WHERE userName = ?";
+	    String query = "SELECT roles FROM cse360users WHERE userName = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setString(1, userName);
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        if (rs.next()) {
-	            return rs.getString("role"); // Return the role if user exists
+	            return rs.getString("roles"); // Return the role if user exists
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
