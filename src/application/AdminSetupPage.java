@@ -6,6 +6,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import databasePart1.*;
 
@@ -27,10 +29,18 @@ public class AdminSetupPage {
         userNameField.setPromptText("Enter Admin userName");
         userNameField.setMaxWidth(250);
 
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter Admin Name");
+        nameField.setMaxWidth(250);
+        
+        TextField emailField = new TextField();
+        emailField.setPromptText("Enter Admin email");
+        emailField.setMaxWidth(250);
+        
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter Password");
         passwordField.setMaxWidth(250);
-
+        
         Button setupButton = new Button("Setup");
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
@@ -38,6 +48,8 @@ public class AdminSetupPage {
         setupButton.setOnAction(a -> {
         	// Retrieve user input
             String userName = userNameField.getText();
+            String name = nameField.getText();
+            String email = emailField.getText();
             String password = passwordField.getText();
 
             String userNameValidate = UserNameRecognizer.checkForValidUserName(userName); // Using FSM to validate Username
@@ -57,7 +69,10 @@ public class AdminSetupPage {
             
             try {
             	// Create a new User object with admin role and register in the database
-            	User user=new User(userName, password, "admin");
+            	List<String> roles = new ArrayList<>();
+            	roles.add("admin");
+            
+            	User user= new User(userName, name, password, email, roles);
                 databaseHelper.register(user);
                 System.out.println("Administrator setup completed.");
                 
@@ -69,7 +84,7 @@ public class AdminSetupPage {
             }
         });
 
-        VBox layout = new VBox(10, userNameField, passwordField, setupButton, errorLabel);
+        VBox layout = new VBox(10, userNameField, nameField, emailField, passwordField, setupButton, errorLabel);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
         primaryStage.setScene(new Scene(layout, 800, 400));

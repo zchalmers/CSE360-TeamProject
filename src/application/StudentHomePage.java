@@ -1,5 +1,6 @@
 package application;
 
+import databasePart1.DatabaseHelper;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -16,12 +17,20 @@ public class StudentHomePage {
      * @param primaryStage The primary stage where the scene will be displayed.
      */
 
+	private final DatabaseHelper databaseHelper;
 	
+	public StudentHomePage(DatabaseHelper databaseHelper) {
+		this.databaseHelper = databaseHelper;
+	}
     public void show(Stage primaryStage) {
     	VBox layout = new VBox(40);
     	Button quitButton = new Button("Back to login");
-    	
+   
 	    layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
+	    
+	    quitButton.setOnAction(a -> {
+	    	new SetupLoginSelectionPage(databaseHelper).show(primaryStage);
+	    });
 	    
 	    // label to display the welcome message for the student
 	    Label studentLabel = new Label("Hello, Student!");

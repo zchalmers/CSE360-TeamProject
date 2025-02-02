@@ -6,6 +6,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import databasePart1.*;
 
@@ -27,10 +29,18 @@ public class SetupAccountPage {
      */
     public void show(Stage primaryStage) {
     	// Input fields for userName, password, and invitation code
-        TextField userNameField = new TextField();
-        userNameField.setPromptText("Enter userName");
+    	TextField userNameField = new TextField();
+        userNameField.setPromptText("Enter UserName");
         userNameField.setMaxWidth(250);
 
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter Name");
+        nameField.setMaxWidth(250);
+        
+        TextField emailField = new TextField();
+        emailField.setPromptText("Enter Email");
+        emailField.setMaxWidth(250);
+        
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter Password");
         passwordField.setMaxWidth(250);
@@ -48,7 +58,9 @@ public class SetupAccountPage {
         
         setupButton.setOnAction(a -> {
         	// Retrieve user input
-            String userName = userNameField.getText();
+        	String userName = userNameField.getText();
+            String name = nameField.getText();
+            String email = emailField.getText();
             String password = passwordField.getText();
             String code = inviteCodeField.getText();
             
@@ -75,11 +87,14 @@ public class SetupAccountPage {
             		if(databaseHelper.validateInvitationCode(code)) {
             			
             			// Create a new user and register them in the database
-		            	User user=new User(userName, password, "user");
-		                databaseHelper.register(user);
+            			List<String> roles = new ArrayList<>();
+                    	roles.add("student");
+                    
+                    	User user= new User(userName, name, password, email, roles);
+                        databaseHelper.register(user);
 		                
 		             // Navigate to the Welcome Login Page
-		                new WelcomeLoginPage(databaseHelper).show(primaryStage,user);
+		                new WelcomeLoginPage(databaseHelper).show(primaryStage, user);
             		}
             		else {
             			errorLabel.setText("Please enter a valid invitation code.");
@@ -97,7 +112,7 @@ public class SetupAccountPage {
 
         VBox layout = new VBox(10);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-        layout.getChildren().addAll(userNameField, passwordField,inviteCodeField, setupButton, errorLabel);
+        layout.getChildren().addAll(userNameField, nameField, emailField, passwordField,inviteCodeField, setupButton, errorLabel);
 
         primaryStage.setScene(new Scene(layout, 800, 400));
         primaryStage.setTitle("Account Setup");

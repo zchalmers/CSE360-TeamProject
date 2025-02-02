@@ -21,10 +21,12 @@ public class RoleSelectPage {
      */
 	private final DatabaseHelper databaseHelper;
 	String selectedRole;
-	User user = databaseHelper.currentUser;
+	User user;
+	
 	
     public RoleSelectPage(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
+        user = databaseHelper.currentUser;
     }
 	
     public void show(Stage primaryStage) { 
@@ -61,38 +63,30 @@ public class RoleSelectPage {
 		// in ComboBox
 		// Based on role selected, go to that role's home page.
 		nextButton.setOnAction(a -> {
-			try {
-				switch (selectedRole) {
-				case "admin":
-					new AdminHomePage(databaseHelper).show(primaryStage);
-					break;
-				case "student":
-					new StudentHomePage(/* databaseHelper */).show(primaryStage);
-					break;
-				case "instructor":
-					new InstructorHomePage(/* databaseHelper */).show(primaryStage);
-					break;
-				case "staff":
-					new StaffHomePage(/* databaseHelper */).show(primaryStage);
-					break;
-				case "reviewer":
-					new ReviewerHomePage(/* databaseHelper */).show(primaryStage);
-					break;
-				}
-			} catch (SQLException e) {
-				System.err.println("Database error: " + e.getMessage());
-				e.printStackTrace();
+			switch (selectedRole) {
+			case "admin":
+				new AdminHomePage(databaseHelper).show(primaryStage, user);
+				break;
+			case "student":
+				new StudentHomePage(databaseHelper).show(primaryStage);
+				break;
+			case "instructor":
+				new InstructorHomePage(/* databaseHelper */).show(primaryStage);
+				break;
+			case "staff":
+				new StaffHomePage(/* databaseHelper */).show(primaryStage);
+				break;
+			case "reviewer":
+				new ReviewerHomePage(/* databaseHelper */).show(primaryStage);
+				break;
+				
 			}
 		});
 	    
 		// Quit button to return to User Login Screen
 		quitButton.setOnAction(a -> {
-			try {
-				new UserLoginPage(databaseHelper).show(primaryStage);
-			} catch (SQLException e) {
-				System.err.println("Database error: " + e.getMessage());
-				e.printStackTrace();
-			}
+			new UserLoginPage(databaseHelper).show(primaryStage);
+
 		});
 
 	    // Attach buttons and combobox to layout

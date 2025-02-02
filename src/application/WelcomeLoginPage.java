@@ -5,6 +5,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.application.Platform;
+
+import java.util.List;
+
 import databasePart1.*;
 
 /**
@@ -28,15 +31,16 @@ public class WelcomeLoginPage {
 	    
 	    // Button to navigate to the user's respective page based on their role
 	    Button continueButton = new Button("Continue to your Page");
+	    
 	    continueButton.setOnAction(a -> {
-	    	String role =user.getRole();
-	    	System.out.println(role);
+	    	List<String> roles = user.getRoles();
+	    	System.out.println(roles.toString());
 	    	
-	    	if(role.equals("admin")) {
-	    		new AdminHomePage(databaseHelper).show(primaryStage);
+	    	if(roles.contains("admin")) {
+	    		new AdminHomePage(databaseHelper).show(primaryStage, user);
 	    	}
-	    	else if(role.equals("user")) {
-	    		new UserHomePage().show(primaryStage);
+	    	else if(roles.contains("student")) {
+	    		new UserHomePage(user).show(primaryStage);
 	    	}
 	    });
 	    
@@ -48,13 +52,22 @@ public class WelcomeLoginPage {
 	    });
 	    
 	    // "Invite" button for admin to generate invitation codes
-	    if ("admin".equals(user.getRole())) {
-            Button inviteButton = new Button("Invite");
-            inviteButton.setOnAction(a -> {
-                new InvitationPage().show(databaseHelper, primaryStage);
-            });
-            layout.getChildren().add(inviteButton);
-        }
+	    if (user.getRoles().contains("admin")) {
+	    	Button inviteButton = new Button("Invite");
+	        inviteButton.setOnAction(a -> {
+	            new InvitationPage().show(databaseHelper, primaryStage);
+	        });
+	        layout.getChildren().add(inviteButton);
+	    }
+	    
+	    
+//	    if ("admin".equals(user.getRole())) {
+//            Button inviteButton = new Button("Invite");
+//            inviteButton.setOnAction(a -> {
+//                new InvitationPage().show(databaseHelper, primaryStage);
+//            });
+//            layout.getChildren().add(inviteButton);
+//        }
 
 	    layout.getChildren().addAll(welcomeLabel,continueButton,quitButton);
 	    Scene welcomeScene = new Scene(layout, 800, 400);

@@ -33,7 +33,7 @@ public class AdminHomePage {
 	}
 	
 	
-    public void show(Stage primaryStage) {
+    public void show(Stage primaryStage, User user) {
     	TableView<User> table = new TableView<>();
     	    
 	    List<User> users = new ArrayList<>();
@@ -67,7 +67,11 @@ public class AdminHomePage {
         table.setItems(userObservableList);
 	    
 	    
-	    
+        Button backButton = new Button("Back");
+        backButton.setOnAction(a -> {
+        	new WelcomeLoginPage(helper).show(primaryStage, user);
+        });
+        
 	    // PUT BUTTONS HERE 
 	    
 	    TableColumn<User, Void> deleteColumn = new TableColumn<>("Delete User");
@@ -115,6 +119,7 @@ public class AdminHomePage {
 	    table.getColumns().add(deleteColumn);
 	    
 	    VBox vbox = new VBox(table);
+	    vbox.getChildren().add(backButton);
         Scene scene = new Scene(vbox, 500, 300);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX TableView with List<Users>");

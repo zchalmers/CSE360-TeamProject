@@ -25,27 +25,33 @@ public class UserLoginPage {
     private void roleHomePage(User user, Stage primaryStage) {
     	switch (user.getRoles().get(0).toLowerCase()) {
     	case "admin":
-    		new AdminHomePage(databaseHelper).show(primaryStage);
+    		databaseHelper.setUserCurrentRole("admin");
+    		new WelcomeLoginPage(databaseHelper).show(primaryStage, user);    		
     		break;
     		
     	case "student":
-    		new StudentHomePage().show(primaryStage);
+    		databaseHelper.setUserCurrentRole("student");
+    		new StudentHomePage(databaseHelper).show(primaryStage);
     		break;
     	
     	case "instructor":
+    		databaseHelper.setUserCurrentRole("instructor");
     		new InstructorHomePage().show(primaryStage);
     		break;
     	
     	case "staff":
+    		databaseHelper.setUserCurrentRole("staff");
     		new StaffHomePage().show(primaryStage);
     		break;
     	
     	case "reviewer":
+    		databaseHelper.setUserCurrentRole("reviewer");
     		new ReviewerHomePage().show(primaryStage);
     		break;
     		
     	default:
-            new UserHomePage().show(primaryStage);
+    		databaseHelper.setUserCurrentRole("user");
+            new UserHomePage(user).show(primaryStage);
             break;
     	}
     }
@@ -89,35 +95,51 @@ public class UserLoginPage {
             
             
             try {
-            	User user=new User(userName, password, "");
             	
-            	// Retrieve the user's role from the database using userName
-            	String role = databaseHelper.getUserRole(userName);
+            	User user = databaseHelper.login(userName, password);
             	
-            	if(role!=null) {
-            		if(databaseHelper.login(user)) {
-            			if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() == 1) {
-            				// If the user has only one role, go directly to the home page
-            				roleHomePage(databaseHelper.currentUser, primaryStage);
-					
-            			} else if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() > 1) {
-            				//If multiple roles, go to role selection
-            				new RoleSelectPage(databaseHelper).show(primaryStage);
-					
-            			} else {
-            				// Display an error if role information is invalid
-            				errorLabel.setText("Error retrieving user roles.");
-            			}		
+            	if (user != null) {
+            		if (user.getRoles().size() > 1) {
+            			new RoleSelectPage(databaseHelper).show(primaryStage);
             		}
             		else {
-            			// Display an error if the login fails
-                        errorLabel.setText("Error logging in");
+            			roleHomePage(user, primaryStage);
             		}
             	}
+            	
             	else {
-            		// Display an error if the account does not exist
-                    errorLabel.setText("user account doesn't exists");
-            	}
+        			 //Display an error if the login fails
+                   errorLabel.setText("Error logging in");
+        		}
+//            	User user=new User(userName, password, "");
+//            	
+//            	// Retrieve the user's role from the database using userName
+//            	String role = databaseHelper.getUserRole(userName);
+//            	
+//            	if(role!=null) {
+//            		if(databaseHelper.login(user)) {
+//            			if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() == 1) {
+//            				// If the user has only one role, go directly to the home page
+//            				roleHomePage(databaseHelper.currentUser, primaryStage);
+//					
+//            			} else if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() > 1) {
+//            				//If multiple roles, go to role selection
+//            				new RoleSelectPage(databaseHelper).show(primaryStage);
+//					
+//            			} else {
+//            				// Display an error if role information is invalid
+//            				errorLabel.setText("Error retrieving user roles.");
+//            			}		
+//            		}
+//            		else {
+//            			// Display an error if the login fails
+//                        errorLabel.setText("Error logging in");
+//            		}
+//            	}
+//            	else {
+//            		// Display an error if the account does not exist
+//                    errorLabel.setText("user account doesn't exists");
+//            	}
             	
             } catch (SQLException e) {
                 System.err.println("Database error: " + e.getMessage());
