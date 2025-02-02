@@ -16,7 +16,7 @@ import application.User;
  * The DatabaseHelper class is responsible for managing the connection to the database,
  * performing operations such as user registration, login validation, and handling invitation codes.
  */
-public class DatabaseHelper {
+public class DatabaseTests {
 
 	// JDBC driver name and database URL 
 	static final String JDBC_DRIVER = "org.h2.Driver";   
