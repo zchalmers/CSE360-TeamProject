@@ -20,6 +20,30 @@ public class UserLoginPage {
     public UserLoginPage(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
     }
+    
+    //Method to include direction to the necessary role pages
+    private void roleHomePage(User user, Stage primaryStage) {
+    	switch (user.getRole().toLowerCase()) {
+    	case "admin":
+    		new AdminHomePage(databaseHelper).show(primaryStage);
+    		break;
+    		
+    	case "student":
+    		new StudentHomePage().show(primaryStage);
+    		break;
+    	
+    	case "instructor":
+    		new InstructorHomePage().show(primaryStage);
+    		break;
+    	
+    	case "staff":
+    		new StaffHomePage().show(primaryStage);
+    		break;
+    	
+    	case "reviewer":
+    		new ReviewerHomePage().show(primaryStage);
+    	}
+    }
 
     public void show(Stage primaryStage) {
     	// Input field for the user's userName, password
@@ -42,6 +66,23 @@ public class UserLoginPage {
         	// Retrieve user inputs
             String userName = userNameField.getText();
             String password = passwordField.getText();
+
+            String userNameValidate = UserNameRecognizer.checkForValidUserName(userName); // Using FSM to validate Username
+            String passwordValidate = PasswordEvaluator.evaluatePassword(password);       // Using FSM to validate Password
+            
+            if (!userNameValidate.isEmpty()) {  // if there is no error then username is valid
+            	userNameValidate = "Username Error:" + userNameValidate;   // make it more descriptive
+            	errorLabel.setText(userNameValidate);      // set the errorlabel for username error
+            	return;
+            }
+            
+            if (!passwordValidate.isEmpty()) {
+            	passwordValidate = "Password Error: \n" + passwordValidate;
+            	errorLabel.setText(passwordValidate);
+        		return;
+            }
+            
+            
             try {
             	User user=new User(userName, password, "");
             	WelcomeLoginPage welcomeLoginPage = new WelcomeLoginPage(databaseHelper);
@@ -52,17 +93,18 @@ public class UserLoginPage {
             	if(role!=null) {
             		user.setRole(role);
             		if(databaseHelper.login(user)) {
+            			int roleCount = databaseHelper.getUserRolesCount(userName); //Count roles
             			welcomeLoginPage.show(primaryStage,user);
-            			if (role.equalsIgnoreCase("Admin")) {
-                            // Redirect to AdminHomePage
-                            new AdminHomePage().show(primaryStage);
-                        } else if (databaseHelper.getUserRolesCount(userName) ==1) {
-            				//If the user has only one role, take them directly to their home screen
-            				new UserHomePage(user).show(primaryStage);
-            			} else {
+            			if (roleCount > 1) {
+            				// If multiple roles, go to RoleSelectPage
             				new RoleSelectPage(databaseHelper).show(primaryStage);
+            			} else if (roleCount == 1) {
+            				//If the user has only role, go to their home page
+            				roleHomePage(user, primaryStage);
+       
             			}
-            		} else {
+            		}
+            		else {
             			// Display an error if the login fails
                         errorLabel.setText("Error logging in");
             		}
