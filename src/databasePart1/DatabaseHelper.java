@@ -30,7 +30,7 @@ public class DatabaseHelper {
 	private Statement statement = null; 
 	//	PreparedStatement pstmt
 
-	User currentUser;
+	public User currentUser;
 	
 	public void connectToDatabase() throws SQLException {
 		try {
