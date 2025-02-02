@@ -1,7 +1,16 @@
 package application;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import databasePart1.DatabaseHelper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -16,21 +25,102 @@ public class AdminHomePage {
      * Displays the admin page in the provided primary stage.
      * @param primaryStage The primary stage where the scene will be displayed.
      */
+	
+	private final DatabaseHelper helper;
+	
+	public AdminHomePage(DatabaseHelper helper) {
+		this.helper = helper;
+	}
+	
+	
     public void show(Stage primaryStage) {
-    	VBox layout = new VBox();
+    	TableView<User> table = new TableView<>();
+    	    
+	    List<User> users = new ArrayList<>();
+	    
+	    try {
+	    	users = helper.getAllUsers();
+	    	
+	    } catch (SQLException e) {
+	    	System.out.println("Should never reach here, can't get all users");
+	    }
+	    
+	    
+	    TableColumn<User, String> usernames = new TableColumn<>("Username");
+        usernames.setCellValueFactory(new PropertyValueFactory<>("username"));
+
+        TableColumn<User, String> names = new TableColumn<>("Name");
+        names.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<User, String> emails = new TableColumn<>("Email");
+        emails.setCellValueFactory(new PropertyValueFactory<>("email"));
+
+        TableColumn<User, String> roles = new TableColumn<>("Roles");
+        roles.setCellValueFactory(new PropertyValueFactory<>("roles"));
+        
+        // Add columns to the table
+        table.getColumns().addAll(usernames, names, emails, roles);
     	
-	    layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
+    	System.out.println("USERS:" + users);
+    	
+        ObservableList<User> userObservableList = FXCollections.observableArrayList(users);
+        table.setItems(userObservableList);
 	    
-	    // label to display the welcome message for the admin
-	    Label adminLabel = new Label("Hello, Admin!");
 	    
-	    adminLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+	    
+	    // PUT BUTTONS HERE 
+	    
+	    TableColumn<User, Void> deleteColumn = new TableColumn<>("Delete User");
 
-	    layout.getChildren().add(adminLabel);
-	    Scene adminScene = new Scene(layout, 800, 400);
+	    deleteColumn.setCellFactory(tc -> new TableCell<>() {
+	        private final Button button = new Button("Delete");
+	        
+	        {   
+	        	button.setOnAction(event -> {
+	                User user = getTableView().getItems().get(getIndex());
+	                
+	                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	                alert.setTitle("Confirm Deletion");
+	                alert.setHeaderText("Are you sure you want to delete this user?");
+	                alert.setContentText("User: " + user.getUsername());
 
-	    // Set the scene to primary stage
-	    primaryStage.setScene(adminScene);
-	    primaryStage.setTitle("Admin Page");
+	                Optional<ButtonType> result = alert.showAndWait();
+	                
+	                if (result.isPresent() && result.get() == ButtonType.OK) {
+	                	
+	                	if (helper.deleteUser(user.getUsername())) {
+	                		System.out.println("User deleted: " + user.getUsername());
+
+	                		getTableView().getItems().remove(user);
+	                        
+	                		//getTableView().refresh();
+
+	                	}
+	                }
+	            });
+	        }
+	        
+	        @Override
+	        protected void updateItem(Void item, boolean empty) {
+	            super.updateItem(item, empty);
+	            if (empty) {
+	                setGraphic(null);
+	            } else {
+	                setGraphic(button);
+	            }
+	        }
+	        
+	    });
+	    
+	    table.getColumns().add(deleteColumn);
+	    
+	    VBox vbox = new VBox(table);
+        Scene scene = new Scene(vbox, 500, 300);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("JavaFX TableView with List<Users>");
+        primaryStage.show();
+        
+ 
     }
+       
 }
