@@ -96,14 +96,11 @@ public class UserLoginPage {
             	
             	if(role!=null) {
             		if(databaseHelper.login(user)) {
-            			//Access logged-in user info
-            			User currentUser = databaseHelper.currentUser;
-				
-            			if (currentUser != null && currentUser.getRoles().size() == 1) {
+            			if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() == 1) {
             				// If the user has only one role, go directly to the home page
-            				roleHomePage(currentUser, primaryStage);
+            				roleHomePage(databaseHelper.currentUser, primaryStage);
 					
-            			} else if (currentUser != null && currentUser.getRoles().size() > 1) {
+            			} else if (databaseHelper.currentUser != null && databaseHelper.currentUser.getRoles().size() > 1) {
             				//If multiple roles, go to role selection
             				new RoleSelectPage(databaseHelper).show(primaryStage);
 					
