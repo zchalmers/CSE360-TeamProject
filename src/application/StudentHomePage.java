@@ -18,13 +18,7 @@ public class StudentHomePage {
      * Displays the student page in the provided primary stage.
      * @param primaryStage The primary stage where the scene will be displayed.
      */
-
-	private final DatabaseHelper databaseHelper;
-
-public StudentHomePage(DatabaseHelper databaseHelper) {
-        this.databaseHelper = databaseHelper;
-    }
-
+	
 	private final DatabaseHelper databaseHelper;
 	
 	public StudentHomePage(DatabaseHelper databaseHelper) {
