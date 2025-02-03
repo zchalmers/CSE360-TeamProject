@@ -42,6 +42,7 @@ public class AdminSetupPage {
         passwordField.setMaxWidth(250);
         
         Button setupButton = new Button("Setup");
+	setupButton.setDefaultButton(true);
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
         
