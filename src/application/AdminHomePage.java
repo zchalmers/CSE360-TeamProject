@@ -69,7 +69,7 @@ public class AdminHomePage {
 	    
         Button backButton = new Button("Back to login");
         backButton.setOnAction(a -> {
-        	new UserLoginPage(helper).show(primaryStage, user);
+        	new UserLoginPage(helper).show(primaryStage);
         });
         
 	    // PUT BUTTONS HERE 
