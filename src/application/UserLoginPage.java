@@ -26,7 +26,7 @@ public class UserLoginPage {
     	switch (user.getRoles().get(0).toLowerCase()) {
     	case "admin":
     		databaseHelper.setUserCurrentRole("admin");
-    		new WelcomeLoginPage(databaseHelper).show(primaryStage, user);    		
+    		new AdminHomePage(databaseHelper).show(primaryStage, user);    		
     		break;
     		
     	case "student":
