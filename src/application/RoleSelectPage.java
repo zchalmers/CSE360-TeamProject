@@ -2,11 +2,9 @@ package application;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.sql.SQLException;
-
 import databasePart1.DatabaseHelper;
 
 /**
@@ -34,10 +32,15 @@ public class RoleSelectPage {
     	// Create Next and Back buttons
     	Button nextButton = new Button("Next");
     	Button quitButton = new Button("Back");
+    	
+    	// Set nextButton to default to allow Enter to activate
+    	nextButton.setDefaultButton(true);
 
     	// Create layout for buttons and combobox
-    	VBox layout = new VBox(10);    	
-    	layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
+    	VBox layoutV = new VBox();    	
+    	layoutV.setStyle("-fx-alignment: center; -fx-padding: 20;");
+    	HBox layoutH = new HBox(10);
+    	layoutH.setStyle("-fx-alignment: center; -fx-padding: 20;");
 	    	    
 	    // Create combobox for selecting roles
 	    ComboBox<String> comboBox = new ComboBox<>();
@@ -63,6 +66,10 @@ public class RoleSelectPage {
 		// in ComboBox
 		// Based on role selected, go to that role's home page.
 		nextButton.setOnAction(a -> {
+			// Set currentRole in databaseHelper
+			databaseHelper.currentUser.setCurrentRole(selectedRole);
+			
+			// Direct user to role's home page
 			switch (selectedRole) {
 			case "admin":
 				new AdminHomePage(databaseHelper).show(primaryStage, user);
@@ -88,10 +95,14 @@ public class RoleSelectPage {
 			new UserLoginPage(databaseHelper).show(primaryStage);
 
 		});
+		
+		// Attach nextButton and quitButton to the same container
+		layoutH.getChildren().addAll(nextButton, quitButton);
 
-	    // Attach buttons and combobox to layout
-	    layout.getChildren().addAll(comboBox, nextButton, quitButton);
-	    Scene roleSelectScene = new Scene(layout, 800, 400);
+	    // Attach buttons and combobox to the same container
+		layoutV.getChildren().addAll(comboBox, layoutH);
+	    
+	    Scene roleSelectScene = new Scene(layoutV, 800, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(roleSelectScene);
