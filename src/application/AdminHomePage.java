@@ -153,7 +153,7 @@ public class AdminHomePage {
 	    table.getColumns().add(changeRole);
 	    table.getColumns().add(deleteColumn);
 	    
-	    HBox hbox = new HBox(backButton, inviteButton);
+	    HBox hbox = new HBox(10, backButton, inviteButton);
 	    VBox vbox = new VBox(table);
 	    vbox.getChildren().addAll(hbox);
         Scene scene = new Scene(vbox, 800, 400);
