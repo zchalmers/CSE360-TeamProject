@@ -67,9 +67,9 @@ public class AdminHomePage {
         table.setItems(userObservableList);
 	    
 	    
-        Button backButton = new Button("Back");
+        Button backButton = new Button("Back to login");
         backButton.setOnAction(a -> {
-        	new WelcomeLoginPage(helper).show(primaryStage, user);
+        	new UserLoginPage(helper).show(primaryStage, user);
         });
         
 	    // PUT BUTTONS HERE 
@@ -120,7 +120,7 @@ public class AdminHomePage {
 	    
 	    VBox vbox = new VBox(table);
 	    vbox.getChildren().add(backButton);
-        Scene scene = new Scene(vbox, 500, 300);
+        Scene scene = new Scene(vbox, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX TableView with List<Users>");
         primaryStage.show();
