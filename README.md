@@ -32,7 +32,7 @@ JavaFX SDK 23.0.1
 
 Zachary Chalmers
 
-Chris Espinal
+Chris Espinal  - cespina3@asu.edu
 
 Darren Fernandes
 
