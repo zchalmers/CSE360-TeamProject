@@ -94,7 +94,7 @@ public class SetupAccountPage {
                         databaseHelper.register(user);
 		                
 		             // Navigate to the Welcome Login Page
-		                new WelcomeLoginPage(databaseHelper).show(primaryStage, user);
+		                new UserLoginPage(databaseHelper).show(primaryStage);
             		}
             		else {
             			errorLabel.setText("Please enter a valid invitation code.");
