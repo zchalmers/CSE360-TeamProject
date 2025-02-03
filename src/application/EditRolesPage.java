@@ -61,7 +61,7 @@ public class EditRolesPage {
 	    		new AdminHomePage(databaseHelper).show(primaryStage, user); // Exit the JavaFX application
 	    	}
 	    	else {
-	    		System.out.println("It is not a role");
+	    		System.out.println("User has this role, deleting role. ");
 	    		databaseHelper.removeRoles(user.getUsername(), roleToAdd);
 	    	}
 	    	}

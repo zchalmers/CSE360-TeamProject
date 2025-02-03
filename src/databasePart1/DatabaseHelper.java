@@ -156,6 +156,7 @@ public class DatabaseHelper {
 	public boolean removeRoles(String username, String newRole) throws SQLException {
 		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
 		// NOW THAT WE HAVE CURRENTROLE COULD CHANGE THIS TO ONLY IF ADMIN AND ONLY ONE ADMIN 
+		// TODO: 
 		if (!username.equals(currentUser.getUsername())) {
 			
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -335,6 +336,7 @@ public class DatabaseHelper {
 	}
 
 	private List<String> rolesDeserial(String roles) {
+		// fix bug where it turns a  blank string and still makes  alist ouot of it 
 		return new ArrayList<>(Arrays.asList(roles.split(",")));
 	}
 	
