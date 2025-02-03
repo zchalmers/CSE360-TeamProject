@@ -28,6 +28,10 @@ public class InstructorHomePage {
 	    
 	    instructorLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
+	    quitButton.setOnAction(a -> {
+		    new UserLoginPage(helper).show(primaryStage);
+	    });
+
 	    layout.getChildren().addAll(instructorLabel, quitButton);
 	    Scene instructorScene = new Scene(layout, 800, 400);
 
