@@ -6,6 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import databasePart1.DatabaseHelper;
+
 /**
  * StudentHomePage class represents the user interface for the student user.
  * This page displays a simple welcome message for the student.
@@ -16,6 +18,12 @@ public class StudentHomePage {
      * Displays the student page in the provided primary stage.
      * @param primaryStage The primary stage where the scene will be displayed.
      */
+
+	private final DatabaseHelper databaseHelper;
+
+public StudentHomePage(DatabaseHelper databaseHelper) {
+        this.databaseHelper = databaseHelper;
+    }
 
 	private final DatabaseHelper databaseHelper;
 	
@@ -36,6 +44,10 @@ public class StudentHomePage {
 	    Label studentLabel = new Label("Hello, Student!");
 	    
 	    studentLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+	    quitButton.setOnAction(a -> {
+		    new UserLoginPage(databaseHelper).show(primaryStage);
+	    });
 
 	    layout.getChildren().addAll(studentLabel, quitButton);
 	    Scene studentScene = new Scene(layout, 800, 400);
