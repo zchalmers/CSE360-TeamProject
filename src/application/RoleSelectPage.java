@@ -36,7 +36,7 @@ public class RoleSelectPage {
     	Button quitButton = new Button("Back");
 
     	// Create layout for buttons and combobox
-    	VBox layout = new VBox(20);    	
+    	VBox layout = new VBox(10);    	
     	layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
 	    	    
 	    // Create combobox for selecting roles
