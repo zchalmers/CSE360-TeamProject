@@ -1,4 +1,4 @@
-# Team Project Phase 1
+# Team Project (Phase 1)
 ## CSE360-28401(Online)
 
 ### Contents
