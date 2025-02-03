@@ -11,9 +11,9 @@ This is a WIP project program that is mean to be a trusted Q&A search program th
 
 2. Clone/Download the Code from the repository(https://github.com/zchalmers/CSE360-TeamProject) into the desired directory(You will need to remember this location).
 
-3. Open Eclipse IDE Then open the file (File -> Open Projects From File System... -> (Find the file you downloaded from Github)).
+3. Open Eclipse IDE. Then open the project file (File -> Open Projects From File System... -> (Find the file you downloaded from Github)).
 
-4. Hilight the project in the Project Explorer window in Eclipse IDE -> Build Path -> Configure Build Path.. -> Go to the Libraries tab. Now delete the existing libraries and replace with your up to date libraries. Accept and close.
+4. Hilight the project in the Project Explorer window in Eclipse IDE, Right-click -> Build Path -> Configure Build Path.. -> Go to the Libraries tab. Now delete the existing libraries and replace with your up to date libraries. Accept and close.
 
 5. Run
 
