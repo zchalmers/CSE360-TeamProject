@@ -73,6 +73,9 @@ public class UserLoginPage {
 
         Button loginButton = new Button("Login");
 	Button setupButton = new Button("Register New User");
+	    
+	// Set login button as default to allow pressing Enter to activate    
+	loginButton.setDefaultButton(true);
         
         loginButton.setOnAction(a -> {
         	// Retrieve user inputs
