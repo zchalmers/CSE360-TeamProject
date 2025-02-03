@@ -6,9 +6,8 @@
 This is a WIP project program that is mean to be a trusted Q&A search program that will allow a user to login, generate invite codes to invite new members, maintain the database of users including their roles/password reset, and much more. Many features are not yet implemented as we add support for additional user roles and interactions. 
 
 
-### Installation :
-(Using Eclipse IDE for Windows)
-## Libraries Required For Installation(Provided in-class)
+### Installation : (Using Eclipse IDE for Windows)
+#### Libraries Required For Installation(Provided in-class)
 
 H2.zip
 
