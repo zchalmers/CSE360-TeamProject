@@ -335,7 +335,7 @@ public class DatabaseHelper {
 	}
 
 	private List<String> rolesDeserial(String roles) {
-		return Arrays.asList(roles.split(","));
+		return new ArrayList<>(Arrays.asList(roles.split(",")));
 	}
 	
 	private String rolesSerial(List<String> roles) {

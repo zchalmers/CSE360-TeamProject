@@ -116,6 +116,31 @@ public class AdminHomePage {
 	        
 	    });
 	    
+	    TableColumn<User, Void> changeRole = new TableColumn<>("Change Role");
+	    changeRole.setCellFactory(tc -> new TableCell<>() {
+	        private final Button button = new Button("Change");
+	        
+	        {   
+	        	button.setOnAction(event -> {
+	        		User personBeingChanged = getTableView().getItems().get(getIndex());
+	        		new EditRolesPage(helper).show(primaryStage,personBeingChanged);
+	                
+	            });
+	        }
+	        
+	        @Override
+	        protected void updateItem(Void item, boolean empty) {
+	            super.updateItem(item, empty);
+	            if (empty) {
+	                setGraphic(null);
+	            } else {
+	                setGraphic(button);
+	            }
+	        }
+	        
+	    });
+	    
+	    table.getColumns().add(changeRole);
 	    table.getColumns().add(deleteColumn);
 	    
 	    VBox vbox = new VBox(table);
