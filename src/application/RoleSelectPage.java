@@ -71,13 +71,13 @@ public class RoleSelectPage {
 				new StudentHomePage(databaseHelper).show(primaryStage);
 				break;
 			case "instructor":
-				new InstructorHomePage(/* databaseHelper */).show(primaryStage);
+				new InstructorHomePage(databaseHelper).show(primaryStage);
 				break;
 			case "staff":
-				new StaffHomePage(/* databaseHelper */).show(primaryStage);
+				new StaffHomePage(databaseHelper).show(primaryStage);
 				break;
 			case "reviewer":
-				new ReviewerHomePage(/* databaseHelper */).show(primaryStage);
+				new ReviewerHomePage(databaseHelper).show(primaryStage);
 				break;
 				
 			}
