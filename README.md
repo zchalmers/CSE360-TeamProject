@@ -8,7 +8,7 @@
 5. Standup Meetings File - file containing Standup Meeting recordings and notes
 
 
-This is a WIP project program that is mean to be a trusted Q&A search program that will allow a user to login, generate invite codes to invite new members, maintain the database of users including their roles/password reset, and much more. Many features are not yet implemented as we add support for additional user roles and interactions. 
+This is a WIP project program that is meant to be a trusted Q&A search program that will allow a user to login, generate invite codes to invite new members, maintain the database of users including their roles/password-reset, and much more. Many features are not yet implemented as we add support for additional user roles and interactions. 
 
 
 ### Installation : (Using Eclipse IDE for Windows)
