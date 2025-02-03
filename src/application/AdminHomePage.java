@@ -77,7 +77,7 @@ public class AdminHomePage {
 	Button inviteButton = new Button("Invite");
 	    
 	inviteButton.setOnAction(a -> {
-	new InvitationPage().show(databaseHelper, primaryStage);
+	new InvitationPage().show(helper, primaryStage);
 	});
 	    
         
