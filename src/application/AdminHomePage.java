@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+// adding comments for testing
 
 /**
  * AdminPage class represents the user interface for the admin user.
