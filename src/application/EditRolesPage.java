@@ -31,7 +31,7 @@ public class EditRolesPage {
     	VBox layout = new VBox(5);
 	    layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
 	    
-	    Label userLable = new Label("Roles:");
+	    Label userLable = new Label("Current Roles:");
 	    userLable.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 	    List<String> roles = user.getRoles();
 	    StringBuilder userRoleBuilder = new StringBuilder();
@@ -43,7 +43,7 @@ public class EditRolesPage {
 	    Label userRoleLabel = new Label(userRoleBuilder.toString());
 	    userRoleLabel.setStyle("-fx-font-size: 16px;");
 	    
-	    ObservableList<String> options = FXCollections.observableArrayList("admin", "student", "instructor", "staff", "reviewer" );
+	    ObservableList<String> options = FXCollections.observableArrayList("Admin", "Student", "Instructor", "Staff", "Reviewer" );
 	    @SuppressWarnings({ })
 		final ComboBox<String> comboBox = new ComboBox<String>(options);
 	   
