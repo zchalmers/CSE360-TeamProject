@@ -36,17 +36,17 @@ public class UserLoginPage {
     	
     	case "instructor":
     		databaseHelper.setUserCurrentRole("instructor");
-    		new InstructorHomePage().show(primaryStage);
+    		new InstructorHomePage(databaseHelper).show(primaryStage);
     		break;
     	
     	case "staff":
     		databaseHelper.setUserCurrentRole("staff");
-    		new StaffHomePage().show(primaryStage);
+    		new StaffHomePage(databaseHelper).show(primaryStage);
     		break;
     	
     	case "reviewer":
     		databaseHelper.setUserCurrentRole("reviewer");
-    		new ReviewerHomePage().show(primaryStage);
+    		new ReviewerHomePage(databaseHelper).show(primaryStage);
     		break;
     		
     	default:
