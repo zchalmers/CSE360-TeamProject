@@ -24,7 +24,7 @@ public class StartCSE360 extends Application {
             	
             	new FirstPage(databaseHelper).show(primaryStage);
             } else {
-            	new SetupLoginSelectionPage(databaseHelper).show(primaryStage);
+            	new UserLoginPage(databaseHelper).show(primaryStage);
                 
             }
         } catch (SQLException e) {
