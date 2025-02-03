@@ -42,7 +42,7 @@ public class AdminSetupPage {
         passwordField.setMaxWidth(250);
         
         Button setupButton = new Button("Setup");
-	setupButton.setDefaultButton(true);
+        setupButton.setDefaultButton(true);
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
         
@@ -71,7 +71,7 @@ public class AdminSetupPage {
             try {
             	// Create a new User object with admin role and register in the database
             	List<String> roles = new ArrayList<>();
-            	roles.add("admin");
+            	roles.add("Admin");
             
             	User user= new User(userName, name, password, email, roles);
                 databaseHelper.register(user);
