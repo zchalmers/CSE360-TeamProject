@@ -77,7 +77,7 @@ public class AdminSetupPage {
                 System.out.println("Administrator setup completed.");
                 
                 // Navigate to the Welcome Login Page
-                new WelcomeLoginPage(databaseHelper).show(primaryStage,user);
+                new UserLoginPage(databaseHelper).show(primaryStage,user);
             } catch (SQLException e) {
                 System.err.println("Database error: " + e.getMessage());
                 e.printStackTrace();

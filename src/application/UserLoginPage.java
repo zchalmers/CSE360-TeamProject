@@ -36,17 +36,17 @@ public class UserLoginPage {
     	
     	case "instructor":
     		databaseHelper.setUserCurrentRole("instructor");
-    		new InstructorHomePage().show(primaryStage);
+    		new InstructorHomePage(databaseHelper).show(primaryStage);
     		break;
     	
     	case "staff":
     		databaseHelper.setUserCurrentRole("staff");
-    		new StaffHomePage().show(primaryStage);
+    		new StaffHomePage(databaseHelper).show(primaryStage);
     		break;
     	
     	case "reviewer":
     		databaseHelper.setUserCurrentRole("reviewer");
-    		new ReviewerHomePage().show(primaryStage);
+    		new ReviewerHomePage(databaseHelper).show(primaryStage);
     		break;
     		
     	default:
@@ -72,6 +72,7 @@ public class UserLoginPage {
 
 
         Button loginButton = new Button("Login");
+	Button setupButton = new Button("Register New User");
         
         loginButton.setOnAction(a -> {
         	// Retrieve user inputs
@@ -147,9 +148,13 @@ public class UserLoginPage {
             } 
         });
 
+	setupButton.setOnAction(a -> {
+        	new SetupAccountPage(databaseHelper).show(primaryStage);
+        });    
+
         VBox layout = new VBox(10);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-        layout.getChildren().addAll(userNameField, passwordField, loginButton, errorLabel);
+        layout.getChildren().addAll(userNameField, passwordField, loginButton, setupButton, errorLabel);
 
         primaryStage.setScene(new Scene(layout, 800, 400));
         primaryStage.setTitle("User Login");

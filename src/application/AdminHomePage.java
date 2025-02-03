@@ -72,6 +72,14 @@ public class AdminHomePage {
         backButton.setOnAction(a -> {
         	new UserLoginPage(helper).show(primaryStage);
         });
+
+	// "Invite" button for admin to generate invitation codes
+	Button inviteButton = new Button("Invite");
+	    
+	inviteButton.setOnAction(a -> {
+	new InvitationPage().show(databaseHelper, primaryStage);
+	});
+	    
         
 	    // PUT BUTTONS HERE 
 	    
@@ -145,7 +153,7 @@ public class AdminHomePage {
 	    table.getColumns().add(deleteColumn);
 	    
 	    VBox vbox = new VBox(table);
-	    vbox.getChildren().add(backButton);
+	    vbox.getChildren().addAll(backButton, inviteButton);
         Scene scene = new Scene(vbox, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX TableView with List<Users>");
