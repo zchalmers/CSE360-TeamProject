@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -152,9 +153,10 @@ public class AdminHomePage {
 	    table.getColumns().add(changeRole);
 	    table.getColumns().add(deleteColumn);
 	    
-	    HBox hbox = new HBox(table);
-	    hbox.getChildren().addAll(backButton, inviteButton);
-        Scene scene = new Scene(hbox, 800, 400);
+	    HBox hbox = new HBox(backButton, inviteButton);
+	    VBox vbox = new VBox(table);
+	    vbox.getChildren().addAll(hbox);
+        Scene scene = new Scene(vbox, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX TableView with List<Users>");
         primaryStage.show();
