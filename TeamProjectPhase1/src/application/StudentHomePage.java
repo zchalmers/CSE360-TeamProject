@@ -31,7 +31,7 @@ public class StudentHomePage {
 	    layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
 	    
 	    quitButton.setOnAction(a -> {
-	    	new SetupLoginSelectionPage(databaseHelper).show(primaryStage);
+	    	new UserLoginPage(databaseHelper).show(primaryStage);
 	    });
 	    
 	    // label to display the welcome message for the student
