@@ -20,7 +20,7 @@ public class ReviewerHomePage {
 
 	private final DatabaseHelper databaseHelper;
 
-public InstructorHomePage(DatabaseHelper databaseHelper) {
+public ReviewerHomePage(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
     }
 	
