@@ -74,13 +74,12 @@ public class AdminHomePage {
         });
 
 	// "Invite" button for admin to generate invitation codes
-	if (user.getRoles().contains("admin")) {
-	    	Button inviteButton = new Button("Invite");
-		inviteButton.setOnAction(a -> {
-	        new InvitationPage().show(databaseHelper, primaryStage);
-	        });
-	layout.getChildren().add(inviteButton);
-	 }	    
+	Button inviteButton = new Button("Invite");
+	    
+	inviteButton.setOnAction(a -> {
+	new InvitationPage().show(databaseHelper, primaryStage);
+	});
+	    
         
 	    // PUT BUTTONS HERE 
 	    
