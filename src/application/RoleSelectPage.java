@@ -71,19 +71,19 @@ public class RoleSelectPage {
 			
 			// Direct user to role's home page
 			switch (selectedRole) {
-			case "admin":
+			case "Admin":
 				new AdminHomePage(databaseHelper).show(primaryStage, user);
 				break;
-			case "student":
+			case "Student":
 				new StudentHomePage(databaseHelper).show(primaryStage);
 				break;
-			case "instructor":
+			case "Instructor":
 				new InstructorHomePage(databaseHelper).show(primaryStage);
 				break;
-			case "staff":
+			case "Staff":
 				new StaffHomePage(databaseHelper).show(primaryStage);
 				break;
-			case "reviewer":
+			case "Reviewer":
 				new ReviewerHomePage(databaseHelper).show(primaryStage);
 				break;
 				
