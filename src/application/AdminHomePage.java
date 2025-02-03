@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+// adding comments for testing
 
 /**
  * AdminPage class represents the user interface for the admin user.
@@ -33,7 +34,7 @@ public class AdminHomePage {
 	}
 	
 	
-    public void show(Stage primaryStage) {
+    public void show(Stage primaryStage, User user) {
     	TableView<User> table = new TableView<>();
     	    
 	    List<User> users = new ArrayList<>();
@@ -67,7 +68,11 @@ public class AdminHomePage {
         table.setItems(userObservableList);
 	    
 	    
-	    
+        Button backButton = new Button("Back to login");
+        backButton.setOnAction(a -> {
+        	new UserLoginPage(helper).show(primaryStage);
+        });
+        
 	    // PUT BUTTONS HERE 
 	    
 	    TableColumn<User, Void> deleteColumn = new TableColumn<>("Delete User");
@@ -112,10 +117,36 @@ public class AdminHomePage {
 	        
 	    });
 	    
+	    TableColumn<User, Void> changeRole = new TableColumn<>("Change Role");
+	    changeRole.setCellFactory(tc -> new TableCell<>() {
+	        private final Button button = new Button("Change");
+	        
+	        {   
+	        	button.setOnAction(event -> {
+	        		User personBeingChanged = getTableView().getItems().get(getIndex());
+	        		new EditRolesPage(helper).show(primaryStage,personBeingChanged);
+	                
+	            });
+	        }
+	        
+	        @Override
+	        protected void updateItem(Void item, boolean empty) {
+	            super.updateItem(item, empty);
+	            if (empty) {
+	                setGraphic(null);
+	            } else {
+	                setGraphic(button);
+	            }
+	        }
+	        
+	    });
+	    
+	    table.getColumns().add(changeRole);
 	    table.getColumns().add(deleteColumn);
 	    
 	    VBox vbox = new VBox(table);
-        Scene scene = new Scene(vbox, 500, 300);
+	    vbox.getChildren().add(backButton);
+        Scene scene = new Scene(vbox, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX TableView with List<Users>");
         primaryStage.show();

@@ -24,7 +24,7 @@ public class UserHomePage {
 	    layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
 	    
 	    // Label to display UserName and Role 
-	    Label userLabel = new Label("Hello, " + user.getUserName() + ". Your current role is : " + user.getRole());
+	    Label userLabel = new Label("Hello, " + user.getUsername() + ". Your current role is : " + user.getCurrentRole());
 	    userLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 	    
 	    // Logout button to redirect user back to UserLoginPage

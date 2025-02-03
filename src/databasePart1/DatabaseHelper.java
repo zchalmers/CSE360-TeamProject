@@ -41,8 +41,8 @@ public class DatabaseHelper {
 
 			statement = connection.createStatement(); 
 			// You can use this command to clear the database and restart from fresh.
-			//statement.execute("DROP ALL OBJECTS");
-		    //System.out.println("Database cleared successfully.");
+		//statement.execute("DROP ALL OBJECTS");
+		   // System.out.println("Database cleared successfully.");
 
 			createTables();  // Create the necessary tables if they don't exist
 		} catch (ClassNotFoundException e) {
@@ -50,20 +50,21 @@ public class DatabaseHelper {
 		}
 	}
 
-	// TODO: update for new user class
 	private void createTables() throws SQLException {
 		String userTable = "CREATE TABLE IF NOT EXISTS cse360users ("
 				+ "id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "userName VARCHAR(255) UNIQUE, "
+				+ "name VARCHAR(255), "
 				+ "password VARCHAR(255), "
-				+ "roles VARCHAR(50))";
+				+ "email VARCHAR(255), "
+				+ "roles VARCHAR(70))";
 		statement.execute(userTable);
 		
 		// Create the invitation codes table
 	    String invitationCodesTable = "CREATE TABLE IF NOT EXISTS InvitationCodes ("
 	            + "code VARCHAR(10) PRIMARY KEY, "
-	            + "isUsed BOOLEAN DEFAULT FALSE)";
-		    + "generatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+	            + "isUsed BOOLEAN DEFAULT FALSE,"
+	            + "generatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 	    statement.execute(invitationCodesTable);
 	}
 
@@ -78,29 +79,28 @@ public class DatabaseHelper {
 		return true;
 	}
 
-	// TODO: update for new user class
 	// Registers a new user in the database.
 	public void register(User user) throws SQLException {
-		String insertUser = "INSERT INTO cse360users (userName, password, roles) VALUES (?, ?, ?)";
+		String insertUser = "INSERT INTO cse360users (userName, name, password, email, roles) VALUES (?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
 			pstmt.setString(1, user.getUsername());
-			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getRole());
+			pstmt.setString(2, user.getName());
+			pstmt.setString(3, user.getPassword());
+			pstmt.setString(4, user.getEmail());
+			pstmt.setString(5, rolesSerial(user.getRoles()));
 			pstmt.executeUpdate();
 		}
 	}
 	
-	public void updateRoles(User user) throws SQLException {
+	public void updateRoles(String username, String roles) throws SQLException {
 		String insertUser = "UPDATE cse360users SET roles = ? WHERE username = ?";
 		
-		//String rolesString = rolesDeserial(user.getRole());
 		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
-			pstmt.setString(1, user.getRole());    // update for USER class
-			pstmt.setString(2, user.getUsername());
+			pstmt.setString(1, roles);    
+			pstmt.setString(2, username);
 			pstmt.executeUpdate();
 		}
 	}
-	// TODO: update for new user class
 	public User getUser(String username) throws SQLException {
 		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -108,9 +108,11 @@ public class DatabaseHelper {
 	        ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
+				String name = rs.getString("name");
 				String password = rs.getString("password");
+				String email = rs.getString("email");
 				List<String> roles = rolesDeserial(rs.getString("roles"));
-				return new User(username, password, roles);
+				return new User(username, name, password, email, roles);
 			}
 		}
 		return null;
@@ -131,7 +133,7 @@ public class DatabaseHelper {
 					
 					String rolesString = rolesSerial(roles); 
 					try {
-						updateRoles(new User(username, password, roles)); // update for roles list, update register for rolesList
+						updateRoles(username, rolesString); // update for roles list, update register for rolesList
 						return true;
 					}
 					catch (SQLException e) {
@@ -153,6 +155,8 @@ public class DatabaseHelper {
 	
 	public boolean removeRoles(String username, String newRole) throws SQLException {
 		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
+		// NOW THAT WE HAVE CURRENTROLE COULD CHANGE THIS TO ONLY IF ADMIN AND ONLY ONE ADMIN 
+		// TODO: 
 		if (!username.equals(currentUser.getUsername())) {
 			
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -168,7 +172,7 @@ public class DatabaseHelper {
 					
 						String rolesString = rolesSerial(roles);
 						try {
-							updateRoles(new User(username, password, roles));
+							updateRoles(username, rolesString);
 							return true;
 						}
 						catch (SQLException e) {
@@ -213,7 +217,6 @@ public class DatabaseHelper {
 		return false;
 	}
 	
-	// TODO: update for new user class
 	public List<User> getAllUsers() throws SQLException {
 		String query = "SELECT * FROM cse360users";
 		List<User> users = new ArrayList<>();
@@ -223,10 +226,12 @@ public class DatabaseHelper {
 			
 			while (rs.next()) {
 				String username = rs.getString("username");
+				String name = rs.getString("name");
 				String password = rs.getString("password");
+				String email = rs.getString("email");
 				List<String> roles = rolesDeserial(rs.getString("roles"));
 				
-				User user = new User(username, password, roles);
+				User user = new User(username, name, password, email, roles);
 				System.out.println("USERS: " + user.toString());
 				users.add(user);
 			}
@@ -234,17 +239,20 @@ public class DatabaseHelper {
 		return users;
 	}
 	
-	// TODO: update for new user class
+	// got rid of needing roles to login, not sure why as usernames have to be unique
 	// Validates a user's login credentials.
-	public boolean login(User user) throws SQLException {
-		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? AND roles = ?";
+	public User login(String username, String password) throws SQLException {
+		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? ";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-			pstmt.setString(1, user.getUsername());
-			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getRole());
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			
 			try (ResultSet rs = pstmt.executeQuery()) {
-				currentUser = user;
-				return rs.next();
+				if (rs.next()) {
+					currentUser = getUser(username);
+					return currentUser;
+				}
+				return null;
 			}
 		}
 	}
@@ -268,14 +276,14 @@ public class DatabaseHelper {
 	}
 	
 	// Retrieves the role of a user from the database using their UserName.
-	public String getUserRole(String userName) {
+	public List<String> getUserRole(String userName) {
 	    String query = "SELECT roles FROM cse360users WHERE userName = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setString(1, userName);
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        if (rs.next()) {
-	            return rs.getString("roles"); // Return the role if user exists
+	            return rolesDeserial(rs.getString("roles")); // Return the role if user exists
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -328,13 +336,16 @@ public class DatabaseHelper {
 	}
 
 	private List<String> rolesDeserial(String roles) {
-		return Arrays.asList(roles.split(","));
+		// fix bug where it turns a  blank string and still makes  alist ouot of it 
+		return new ArrayList<>(Arrays.asList(roles.split(",")));
 	}
 	
 	private String rolesSerial(List<String> roles) {
 		return String.join(",", roles);
 	}
-	
+	public void setUserCurrentRole(String role) {
+		currentUser.setCurrentRole(role);
+	}
 	// Closes the database connection and statement.
 	public void closeConnection() {
 		try{ 
