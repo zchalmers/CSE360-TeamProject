@@ -22,7 +22,7 @@ public class InvitationPage {
      * @param primaryStage   The primary stage where the scene will be displayed.
      */
     public void show(DatabaseHelper databaseHelper,Stage primaryStage) {
-    	VBox layout = new VBox();
+    	VBox layout = new VBox(10);
 	    layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
 	    
 	    // Label to display the title of the page
@@ -32,6 +32,12 @@ public class InvitationPage {
 	    // Button to generate the invitation code
 	    Button showCodeButton = new Button("Generate Invitation Code");
 	    
+	    // Set showCodeButton as default so Enter can activate
+	    showCodeButton.setDefaultButton(true);
+	    
+	    // Button to return to login screen
+	    Button quitButton = new Button("Back to Login");
+	    	    
 	    // Label to display the generated invitation code
 	    Label inviteCodeLabel = new Label(""); ;
         inviteCodeLabel.setStyle("-fx-font-size: 14px; -fx-font-style: italic;");
@@ -42,8 +48,11 @@ public class InvitationPage {
             inviteCodeLabel.setText(invitationCode + " - Code will expire in 15 minutes.");
         });
 	    
+       quitButton.setOnAction(a -> {
+    	   new UserLoginPage(databaseHelper).show(primaryStage);
+        });
 
-        layout.getChildren().addAll(userLabel, showCodeButton, inviteCodeLabel);
+        layout.getChildren().addAll( userLabel, showCodeButton, inviteCodeLabel, quitButton);
 	    Scene inviteScene = new Scene(layout, 800, 400);
 
 	    // Set the scene to primary stage
