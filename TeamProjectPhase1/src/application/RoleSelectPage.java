@@ -101,7 +101,7 @@ public class RoleSelectPage {
 		// Attach buttons and combobox to the same container
 		layoutV.getChildren().addAll(comboBox, layoutH);
 
-		Scene roleSelectScene = new Scene(layoutV, 800, 400);
+		Scene roleSelectScene = new Scene(layoutV, 940, 400);
 
 		// Set the scene to primary stage
 		primaryStage.setScene(roleSelectScene);
