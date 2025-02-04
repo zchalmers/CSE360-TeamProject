@@ -107,7 +107,7 @@ public class UserLoginPage {
 
 				else {
 					// Display an error if the login fails
-					errorLabel.setText("Error logging in");
+					errorLabel.setText("Error logging in. Contact an Administrator.");
 				}
 
 			} catch (SQLException e) {
