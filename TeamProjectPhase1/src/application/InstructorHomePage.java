@@ -40,7 +40,7 @@ public InstructorHomePage(DatabaseHelper databaseHelper) {
 	    });
 
 	    layout.getChildren().addAll(instructorLabel, quitButton);
-	    Scene instructorScene = new Scene(layout, 800, 400);
+	    Scene instructorScene = new Scene(layout, 940, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(instructorScene);
