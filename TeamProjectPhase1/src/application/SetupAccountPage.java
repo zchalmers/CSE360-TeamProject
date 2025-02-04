@@ -67,10 +67,10 @@ public class SetupAccountPage {
 			String code = inviteCodeField.getText();
 
 			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
-																			
+
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
-			if (!userNameValidate.isEmpty()) { 
+			if (!userNameValidate.isEmpty()) {
 				errorLabel.setText(userNameValidate);
 				return;
 			}
@@ -89,7 +89,6 @@ public class SetupAccountPage {
 
 						// Create a new user and register them in the database
 						List<String> roles = new ArrayList<>();
-						roles.add("student");
 
 						User user = new User(userName, name, password, email, roles);
 						databaseHelper.register(user);
