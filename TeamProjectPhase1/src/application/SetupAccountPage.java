@@ -66,18 +66,16 @@ public class SetupAccountPage {
 			String password = passwordField.getText();
 			String code = inviteCodeField.getText();
 
-			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName); // Using FSM to validate
-																							// Username
-			String passwordValidate = PasswordEvaluator.evaluatePassword(password); // Using FSM to validate Password
+			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
+																			
+			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
-			if (!userNameValidate.isEmpty()) { // if there is no error then username is valid
-				userNameValidate = "Username Error:" + userNameValidate; // make it more descriptive
-				errorLabel.setText(userNameValidate); // set the errorlabel for username error
+			if (!userNameValidate.isEmpty()) { 
+				errorLabel.setText(userNameValidate);
 				return;
 			}
 
 			if (!passwordValidate.isEmpty()) {
-				passwordValidate = "Password Error: \n" + passwordValidate;
 				errorLabel.setText(passwordValidate);
 				return;
 			}
