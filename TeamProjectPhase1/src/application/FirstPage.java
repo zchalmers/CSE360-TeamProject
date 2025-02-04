@@ -40,7 +40,7 @@ public class FirstPage {
 	    });
 
 	    layout.getChildren().addAll(userLabel, continueButton);
-	    Scene firstPageScene = new Scene(layout, 800, 400);
+	    Scene firstPageScene = new Scene(layout, 940, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(firstPageScene);
