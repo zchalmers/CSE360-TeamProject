@@ -369,12 +369,19 @@ public class DatabaseHelper {
 	}
 
 	private List<String> rolesDeserial(String roles) {
-		// fix bug where it turns a blank string and still makes alist ouot of it
-		return new ArrayList<>(Arrays.asList(roles.split(",")));
+		if (roles == null || roles == "") {
+			return new ArrayList<>();
+		} else {
+			return new ArrayList<>(Arrays.asList(roles.split(",")));
+		}
 	}
 
 	private String rolesSerial(List<String> roles) {
-		return String.join(",", roles);
+		if (roles == null || roles.isEmpty()) {
+			return "";
+		} else {
+			return String.join(",", roles);
+		}
 	}
 
 	public void setUserCurrentRole(String role) {
