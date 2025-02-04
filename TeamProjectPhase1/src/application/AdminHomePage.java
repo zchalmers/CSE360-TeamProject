@@ -261,7 +261,7 @@ public class AdminHomePage {
 		table.getColumns().add(deleteColumn);
 		table.getColumns().add(tempPassword);
 
-		HBox hbox = new HBox(10, backButton, inviteButton);
+		HBox hbox = new HBox(5, backButton, inviteButton);
 		VBox vbox = new VBox(table);
 		vbox.getChildren().addAll(hbox);
 		Scene scene = new Scene(vbox, 940, 400);
