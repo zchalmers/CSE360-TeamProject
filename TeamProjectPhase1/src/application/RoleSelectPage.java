@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 public class RoleSelectPage {
 	/**
 	 * Displays the role-selection page.
+	 * 
 	 * @param primaryStage The primary stage where the scene will be displayed.
 	 */
 	private final DatabaseHelper databaseHelper;
@@ -52,7 +53,8 @@ public class RoleSelectPage {
 		// Set default comboBox text
 		comboBox.setPromptText("Please select a role");
 
-		// ComboBox allows selection of roles. Deactivates Next button until selection
+		// ComboBox allows selection of roles and deactivates Next button until
+		// selection
 		// is made
 		comboBox.setOnAction(a -> {
 			selectedRole = comboBox.getValue();
@@ -92,7 +94,6 @@ public class RoleSelectPage {
 		// Quit button to return to User Login Screen
 		quitButton.setOnAction(a -> {
 			new UserLoginPage(databaseHelper).show(primaryStage);
-
 		});
 
 		// Attach nextButton and quitButton to the same container
@@ -106,7 +107,7 @@ public class RoleSelectPage {
 		// Set the scene to primary stage
 		primaryStage.setScene(roleSelectScene);
 		primaryStage.setTitle("Role-Selection Page");
-		
+
 		// Center the text in the dropdown list of the comboBox
 		comboBox.setCellFactory(a -> new ListCell<String>() {
 			@Override
@@ -117,10 +118,9 @@ public class RoleSelectPage {
 					setText(role.substring(0, 1).toUpperCase() + role.substring(1));
 					setAlignment(Pos.CENTER);
 				}
-				
 			}
 		});
-		
+
 		// Center the text in the comboBox selection
 		comboBox.setButtonCell(new ListCell<String>() {
 			@Override
@@ -131,7 +131,6 @@ public class RoleSelectPage {
 					setText(role.substring(0, 1).toUpperCase() + role.substring(1));
 					setAlignment(Pos.CENTER);
 				}
-				
 			}
 		});
 	}
