@@ -35,7 +35,7 @@ public class UserHomePage {
 	    	});
 
 	    layout.getChildren().addAll(userLabel,logoutButton); // Including logout button
-	    Scene userScene = new Scene(layout, 800, 400);
+	    Scene userScene = new Scene(layout, 940, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(userScene);
