@@ -84,14 +84,12 @@ public class UserLoginPage {
 			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
-			if (!userNameValidate.isEmpty()) { // If there is no error then username is valid
-				userNameValidate = "Username Error:" + userNameValidate; // Make it more descriptive
-				errorLabel.setText(userNameValidate); // Set the errorlabel for username error
+			if (!userNameValidate.isEmpty()) {
+				errorLabel.setText(userNameValidate);
 				return;
 			}
 
 			if (!passwordValidate.isEmpty()) {
-				passwordValidate = "Password Error: \n" + passwordValidate;
 				errorLabel.setText(passwordValidate);
 				return;
 			}
