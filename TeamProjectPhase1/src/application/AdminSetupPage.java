@@ -17,7 +17,6 @@ import databasePart1.*;
  * system with admin credentials.
  */
 public class AdminSetupPage {
-
 	private final DatabaseHelper databaseHelper;
 
 	public AdminSetupPage(DatabaseHelper databaseHelper) {
@@ -27,11 +26,11 @@ public class AdminSetupPage {
 	public void show(Stage primaryStage) {
 
 		// Label to explain the first page to the user
-		Label userLabel = new Label(
-				"             Hello..You are the first person here." + 
-		"\nPlease register an administrator account to continue");
+		Label userLabel = new Label("             Hello..You are the first person here."
+				+ "\nPlease register an administrator account to continue");
 		userLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-		// Input fields for userName and password
+
+		// Input fields for account info
 		TextField userNameField = new TextField();
 		userNameField.setPromptText("Enter Admin userName");
 		userNameField.setMaxWidth(250);
@@ -59,14 +58,14 @@ public class AdminSetupPage {
 			String name = nameField.getText();
 			String email = emailField.getText();
 			String password = passwordField.getText();
+			// Using FSM to validate
+			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
+			// Using FSM to validate Password
+			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
-			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName); // Using FSM to validate
-			// Username
-			String passwordValidate = PasswordEvaluator.evaluatePassword(password); // Using FSM to validate Password
-
-			if (!userNameValidate.isEmpty()) { // if there is no error then username is valid
-				userNameValidate = "Username Error:" + userNameValidate; // make it more descriptive
-				errorLabel.setText(userNameValidate); // set the errorlabel for username error
+			if (!userNameValidate.isEmpty()) { // If there is no error then username is valid
+				userNameValidate = "Username Error:" + userNameValidate; // Make it more descriptive
+				errorLabel.setText(userNameValidate); // Set the errorlabel for username error
 				return;
 			}
 
