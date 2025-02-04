@@ -40,7 +40,7 @@ public ReviewerHomePage(DatabaseHelper databaseHelper) {
 	    });
 
 	    layout.getChildren().addAll(reviewerLabel, quitButton);
-	    Scene reviewerScene = new Scene(layout, 800, 400);
+	    Scene reviewerScene = new Scene(layout, 940, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(reviewerScene);
