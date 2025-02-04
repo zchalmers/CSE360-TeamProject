@@ -41,7 +41,7 @@ public StaffHomePage(DatabaseHelper databaseHelper) {
 	    });
 
 	    layout.getChildren().addAll(staffLabel, quitButton);
-	    Scene staffScene = new Scene(layout, 800, 400);
+	    Scene staffScene = new Scene(layout, 940, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(staffScene);
