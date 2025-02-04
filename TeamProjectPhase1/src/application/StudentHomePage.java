@@ -44,7 +44,7 @@ public class StudentHomePage {
 	    });
 
 	    layout.getChildren().addAll(studentLabel, quitButton);
-	    Scene studentScene = new Scene(layout, 800, 400);
+	    Scene studentScene = new Scene(layout, 940, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(studentScene);
