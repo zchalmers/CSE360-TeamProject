@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * AdminPage class represents the user interface for the admin user. This page
@@ -53,7 +54,19 @@ public class AdminHomePage {
 		emails.setCellValueFactory(new PropertyValueFactory<>("email"));
 
 		TableColumn<User, String> roles = new TableColumn<>("Roles");
-		roles.setCellValueFactory(new PropertyValueFactory<>("roles"));
+		// roles.setCellValueFactory(new PropertyValueFactory<>("roles"));
+		
+		roles.setCellValueFactory(cellData -> {
+			List<String> listOfRoles = cellData.getValue().getRoles();
+			
+			String displayRoles;
+			if (listOfRoles == null || listOfRoles.isEmpty()) {
+				displayRoles = "";
+			} else {					
+				displayRoles = String.join(", ",  listOfRoles);
+			}
+			return new SimpleStringProperty(displayRoles);
+		});
 
 		// Add columns to the table
 		table.getColumns().addAll(usernames, names, emails, roles);
@@ -159,11 +172,15 @@ public class AdminHomePage {
 				// addOrRemove button will remove role if user has it or add it if they don't
 				addOrRemove.setOnAction(a -> {
 					try {
+						User user = getTableView().getItems().get(getIndex());
 						String roleToAdd = comboBox.getSelectionModel().getSelectedItem();
 						if (roleToAdd == null) {
 							return;
 						}
 						if (!user.getRoles().contains(roleToAdd)) {
+							if (user.getRoles() == null || user.getRoles().isEmpty()) {
+								databaseHelper.updateRoles(user.getUsername(), roleToAdd);
+							}
 							System.out.println(user.getRoles() + "\n" + roleToAdd);
 							// System.out.println(!user.getRoles().contains(roleToAdd));
 							databaseHelper.addRoles(user.getUsername(), roleToAdd);
