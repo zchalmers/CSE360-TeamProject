@@ -13,6 +13,9 @@ public class User {
 	private String email;
 	private String currentRole;
 	private List<String> roles;
+	
+	// Flag will be true if one-time password is active on user
+	private boolean otp;
 
 	// Constructor to initialize a new User object with userName, password, and
 	// role.
@@ -55,6 +58,10 @@ public class User {
 	public List<String> getRoles() {
 		return this.roles;
 	}
+	
+	public boolean getOTPFlag(boolean flag) {
+		return this.otp;
+	}
 
 	public void setPassword(String password) {
 		this.password = password;
@@ -62,6 +69,10 @@ public class User {
 
 	public void setCurrentRole(String role) {
 		this.currentRole = role;
+	}
+	
+	public void setOTPFlag(boolean flag) {
+		this.otp = flag;
 	}
 
 	public String toString() {
