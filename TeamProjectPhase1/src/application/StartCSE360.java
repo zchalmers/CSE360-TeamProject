@@ -22,7 +22,7 @@ public class StartCSE360 extends Application {
             databaseHelper.connectToDatabase(); // Connect to the database
             if (databaseHelper.isDatabaseEmpty()) {
             	
-            	new FirstPage(databaseHelper).show(primaryStage);
+            	new AdminSetupPage(databaseHelper).show(primaryStage);
             } else {
             	new UserLoginPage(databaseHelper).show(primaryStage);
                 
