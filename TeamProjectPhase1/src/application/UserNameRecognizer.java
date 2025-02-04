@@ -250,8 +250,15 @@ public class UserNameRecognizer {
 			// State 1 is a final state. Check to see if the UserName length is valid. If so
 			// we
 			// we must ensure the whole string has been consumed.
-
-			if (userNameSize < 4) {
+			if (!((currentChar >= 'A' && currentChar <= 'Z') || // Check for A-Z
+					(currentChar >= 'a' && currentChar <= 'z') || // Check for a-z
+					(currentChar >= '0' && currentChar <= '9') || (currentChar == '.') || // Check for period
+					(currentChar == '-') || // Check for minus
+					(currentChar == '_'))) {
+				// Second character in username is invalid
+				userNameRecognizerErrorMessage += "A Username character can only be A-Z, a-z, 0-9, period, minus or underscore.\n";
+				return userNameRecognizerErrorMessage;
+			} else	if (userNameSize < 4) {
 				// UserName is too small
 				userNameRecognizerErrorMessage += "A UserName must have at least 4 characters.\n";
 				return userNameRecognizerErrorMessage;
