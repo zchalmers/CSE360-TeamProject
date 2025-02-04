@@ -53,7 +53,7 @@ public class DatabaseHelper {
 	private void createTables() throws SQLException {
 		String userTable = "CREATE TABLE IF NOT EXISTS cse360users (" + "id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "userName VARCHAR(255) UNIQUE, " + "name VARCHAR(255), " + "password VARCHAR(255), "
-				+ "email VARCHAR(255), " + "roles VARCHAR(70))";
+				+ "email VARCHAR(255), " + "roles VARCHAR(70), " + "otp BOOLEAN DEFAULT FALSE)";
 		statement.execute(userTable);
 
 		// Create the invitation codes table
@@ -106,6 +106,19 @@ public class DatabaseHelper {
 
 		} catch (SQLException e) {
 			System.out.println("COULD NOT UPDATE PASSWORD: " + e.getMessage());
+		}
+	}
+
+	public void updateOTPFlag(String username, boolean flag) {
+		String insertUser = "UPDATE cse360users SET otp = ? WHERE username = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
+			pstmt.setBoolean(1, flag);
+			pstmt.setString(2, username);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("COULD NOT UPDATE OTP: " + e.getMessage());
 		}
 	}
 
@@ -239,16 +252,34 @@ public class DatabaseHelper {
 
 	// Validates a user's login credentials.
 	public User login(String username, String password) throws SQLException {
-		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? ";
+		String query = "SELECT * FROM cse360users WHERE userName = ? AND (password = ? OR otp = TRUE) AND password <> ''";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
 
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
+					boolean otp = rs.getBoolean("otp");
+					String storedPW = rs.getString("password");
+
+					if (storedPW.isEmpty()) {
+						System.out.println("Password is empty."); // Debug
+						return null;
+					}
+
+					if (otp) {
+						// Reset otp for user and set password to "" or blank
+						String updateQuery = "UPDATE cse360users SET password = '', otp = FALSE WHERE userName = ?";
+						try (PreparedStatement updatepstmt = connection.prepareStatement(updateQuery)) {
+							updatepstmt.setString(1, username);
+							updatepstmt.executeUpdate();
+						}
+					}
+
 					currentUser = getUser(username);
 					return currentUser;
 				}
+
 				return null;
 			}
 		}
