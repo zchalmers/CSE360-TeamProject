@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import databasePart1.*;
 
@@ -52,28 +53,42 @@ public class EditRolesPage {
 		final ComboBox<String> comboBox = new ComboBox<String>(options);
 
 		Button addOrRemove = new Button("Add/Remove");
-		addOrRemove.setOnAction(a -> {
-			try {
-				String roleToAdd = (String) comboBox.getSelectionModel().getSelectedItem();
-				if (!user.getRoles().contains(roleToAdd)) {
-					// databaseHelper.addRoles(user.getUsername(),
-					// (String)comboBox.getSelectionModel().getSelectedItem());}
-					// else{
-					// databaseHelper.removeRoles(user.getUsername(),
-					// (String)comboBox.getSelectionModel().getSelectedItem());
-					System.out.println(user.getRoles() + "\n" + roleToAdd);
-					// System.out.println(!user.getRoles().contains(roleToAdd));
-					databaseHelper.addRoles(user.getUsername(), roleToAdd);
-					new AdminHomePage(databaseHelper).show(primaryStage, user); // Exit the JavaFX application
-				} else {
-					System.out.println("User has this role, deleting role. ");
-					databaseHelper.removeRoles(user.getUsername(), roleToAdd);
-				}
-			} catch (SQLException e) {
-				System.out.println(
-						"Should print this after trying to add the role since I don't know the format for role");
-			}
-		});
+        
+        comboBox.setOnAction(a -> {
+            String check = comboBox.getValue();
+            addOrRemove.setDisable(check == null);
+        });
+        addOrRemove.setOnAction(a -> {
+        	try {
+                String roleToAdd = comboBox.getSelectionModel().getSelectedItem();
+                if (roleToAdd == null) {
+                    return;
+                }
+                if (!user.getRoles().contains(roleToAdd)) {
+                    System.out.println(user.getRoles() + "\n" + roleToAdd);
+                    // System.out.println(!user.getRoles().contains(roleToAdd));
+                    databaseHelper.addRoles(user.getUsername(), roleToAdd);
+                    new EditRolesPage(databaseHelper).show(primaryStage, user); // Exit
+                    } else {
+                        if(roleToAdd.equals("Admin")) {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("STOP!!");
+                            alert.setHeaderText("You cannot delete the 'Admin' role");
+                            alert.setContentText("An admin role cannot be deleted");
+
+                            Optional<ButtonType> result = alert.showAndWait();
+                        }
+                        else {
+                    System.out.println("User has this role, deleting role. ");
+                    databaseHelper.removeRoles(user.getUsername(), roleToAdd);
+                    new EditRolesPage(databaseHelper).show(primaryStage, user); // Exit
+                        }
+                }
+            } catch (SQLException e) {
+                System.out.println(
+                        "Should print this after trying to add the role since I don't know the format for role");
+            }
+        });
 
 		// Button to quit the application
 		Button goBack = new Button("Go Back");
@@ -96,7 +111,9 @@ public class EditRolesPage {
 
 			}
 		});
-
+		
+		
+		
 		// Center the text in the comboBox selection
 		comboBox.setButtonCell(new ListCell<String>() {
 			@Override

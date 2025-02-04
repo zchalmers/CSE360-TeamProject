@@ -39,6 +39,9 @@ public class User {
     public String getCurrentRole() { return this.currentRole; }
     public List<String> getRoles() { return this.roles; }
     
+    public void setPassword(String password) {
+    	this.password = password;
+    }
     public void setCurrentRole(String role) {
     	this.currentRole = role;
     }

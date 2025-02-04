@@ -99,8 +99,22 @@ public class DatabaseHelper {
 			pstmt.setString(1, roles);    
 			pstmt.setString(2, username);
 			pstmt.executeUpdate();
+			this.currentUser.getRoles().add(roles);
 		}
 	}
+	public void updatePassword(String username, String password) {
+		String insertUser = "UPDATE cse360users SET password = ? WHERE username = ?";
+		
+		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
+			pstmt.setString(1, password);    
+			pstmt.setString(2, username);
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("COULD NOT UPDATE PASSWORD: " + e.getMessage());
+		}
+	}
+	
 	public User getUser(String username) throws SQLException {
 		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -157,7 +171,9 @@ public class DatabaseHelper {
 		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
 		// NOW THAT WE HAVE CURRENTROLE COULD CHANGE THIS TO ONLY IF ADMIN AND ONLY ONE ADMIN 
 		// TODO: 
-		if (!newRole.equalsIgnoreCase("admin") && currentUser.getRoles().size() > 1) {
+		//
+		// &&
+		if ( !newRole.equalsIgnoreCase("admin") && currentUser.getRoles().size() > 1) {
 			
 		
 		//if (!username.equals(currentUser.getUsername())) {
@@ -309,6 +325,10 @@ public class DatabaseHelper {
 	    return code;
 	}
 	
+	public String generateOneTimePassword() {
+		return "Password1!";
+	}
+	
 	// Validates an invitation code to check if it is unused.
 	public boolean validateInvitationCode(String code) {
 	    String query = "SELECT * FROM InvitationCodes WHERE code = ? AND isUsed = FALSE AND generatedDate >= DATEADD('MINUTE', -15, CURRENT_TIMESTAMP)";
@@ -338,6 +358,8 @@ public class DatabaseHelper {
 	    }
 	}
 
+	
+	
 	private List<String> rolesDeserial(String roles) {
 		// fix bug where it turns a  blank string and still makes  alist ouot of it 
 		return new ArrayList<>(Arrays.asList(roles.split(",")));

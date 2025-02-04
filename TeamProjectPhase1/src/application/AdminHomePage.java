@@ -150,8 +150,68 @@ public class AdminHomePage {
 	        
 	    });
 	    
+	    TableColumn<User, Void> tempPassword = new TableColumn<>("Forgot Password");
+	    tempPassword.setCellFactory(tc -> new TableCell<>() {
+	        private final Button button = new Button("Set One Time Password");
+
+	        {
+	            button.setOnAction(event -> {
+	                User user = getTableView().getItems().get(getIndex());
+
+	                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	                alert.setTitle("Confirm OTP");
+	                alert.setHeaderText("You are about to generate a One Time Password for this user!");
+	                alert.setContentText("User: " + user.getUsername());
+
+	                Optional<ButtonType> result = alert.showAndWait();
+
+	                if (result.isPresent() && result.get() == ButtonType.OK) {
+	                    String OTP = helper.generateOneTimePassword();
+
+	                    Alert otpConfirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+	                    otpConfirmationAlert.setTitle("Confirm OTP");
+	                    otpConfirmationAlert.setHeaderText("Your ONE TIME PASSWORD is " + OTP);
+	                    otpConfirmationAlert.setContentText("Please write this down and do not share it with anyone!");
+
+	                    Optional<ButtonType> otpResult = otpConfirmationAlert.showAndWait();
+
+	                    if (otpResult.isPresent() && otpResult.get() == ButtonType.OK) {
+	                        Alert finalConfirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+	                        finalConfirmationAlert.setTitle("Confirm OTP");
+	                        finalConfirmationAlert.setHeaderText("By clicking OK you acknowledge that you have " +
+	                                "properly recorded and stored the OTP for this user. \nOnce completed this process cannot be undone!\n" +
+	                                "If the OTP is lost, another OTP must be generated to allow access to this user's account.");
+	                        finalConfirmationAlert.setContentText("Please Confirm");
+
+	                        Optional<ButtonType> finalResult = finalConfirmationAlert.showAndWait();
+
+	                        if (finalResult.isPresent() && finalResult.get() == ButtonType.OK) {
+	                            user.setPassword(OTP);
+	                            helper.updatePassword(user.getUsername(), OTP);
+	                            System.out.println(user.getPassword()); //debug
+	                        }
+	                    }
+	                }
+	            });
+	        }
+
+	        @Override
+	        protected void updateItem(Void item, boolean empty) {
+	            super.updateItem(item, empty);
+	            if (empty) {
+	                setGraphic(null);
+	            } else {
+	                setGraphic(button);
+	            }
+	        }
+	    });
+
+
+	    
+	    
 	    table.getColumns().add(changeRole);
 	    table.getColumns().add(deleteColumn);
+	    table.getColumns().add(tempPassword);
 	    
 	    HBox hbox = new HBox(10, backButton, inviteButton);
 	    VBox vbox = new VBox(table);

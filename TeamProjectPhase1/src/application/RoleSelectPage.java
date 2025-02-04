@@ -86,7 +86,6 @@ public class RoleSelectPage {
 			case "Reviewer":
 				new ReviewerHomePage(databaseHelper).show(primaryStage);
 				break;
-
 			}
 		});
 
