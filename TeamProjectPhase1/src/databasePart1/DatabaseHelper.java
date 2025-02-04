@@ -157,7 +157,10 @@ public class DatabaseHelper {
 		String query = "SELECT * FROM cse360users AS c WHERE c.username = ?	";
 		// NOW THAT WE HAVE CURRENTROLE COULD CHANGE THIS TO ONLY IF ADMIN AND ONLY ONE ADMIN 
 		// TODO: 
-		if (!username.equals(currentUser.getUsername())) {
+		if (!newRole.equalsIgnoreCase("admin") && currentUser.getRoles().size() > 1) {
+			
+		
+		//if (!username.equals(currentUser.getUsername())) {
 			
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 				pstmt.setString(1, username);
