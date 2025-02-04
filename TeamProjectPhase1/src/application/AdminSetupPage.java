@@ -24,6 +24,10 @@ public class AdminSetupPage {
     }
 
     public void show(Stage primaryStage) {
+    	
+    	// Label to explain the first page to the user
+    	Label userLabel = new Label("Hello..You are the first person here. \nPlease register an administrator account to continue");
+	    userLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
     	// Input fields for userName and password
         TextField userNameField = new TextField();
         userNameField.setPromptText("Enter Admin userName");
@@ -85,10 +89,10 @@ public class AdminSetupPage {
             }
         });
 
-        VBox layout = new VBox(10, userNameField, nameField, emailField, passwordField, setupButton, errorLabel);
+        VBox layout = new VBox(10, userLabel, userNameField, nameField, emailField, passwordField, setupButton, errorLabel);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
-        primaryStage.setScene(new Scene(layout, 940, 400));
+        primaryStage.setScene(new Scene(layout, 800, 400));
         primaryStage.setTitle("Administrator Setup");
         primaryStage.show();
     }
