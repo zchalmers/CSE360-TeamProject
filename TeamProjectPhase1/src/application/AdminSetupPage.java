@@ -26,7 +26,8 @@ public class AdminSetupPage {
     public void show(Stage primaryStage) {
     	
     	// Label to explain the first page to the user
-    	Label userLabel = new Label("Hello..You are the first person here. \nPlease register an administrator account to continue");
+    	Label userLabel = new Label("             Hello..You are the first person here. 
+		\nPlease register an administrator account to continue");
 	    userLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
     	// Input fields for userName and password
         TextField userNameField = new TextField();
