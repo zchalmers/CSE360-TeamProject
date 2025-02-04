@@ -57,6 +57,7 @@ public class SetupAccountPage {
 		errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
 
 		Button setupButton = new Button("Setup");
+		setupButton.setDefaultButton(true);
 
 		setupButton.setOnAction(a -> {
 			// Retrieve user input
