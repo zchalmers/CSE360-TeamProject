@@ -114,7 +114,7 @@ public class SetupAccountPage {
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
         layout.getChildren().addAll(userNameField, nameField, emailField, passwordField,inviteCodeField, setupButton, errorLabel);
 
-        primaryStage.setScene(new Scene(layout, 800, 400));
+        primaryStage.setScene(new Scene(layout, 940, 400));
         primaryStage.setTitle("Account Setup");
         primaryStage.show();
     }
