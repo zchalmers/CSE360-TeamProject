@@ -283,7 +283,7 @@ public class AdminHomePage {
 	    HBox hbox = new HBox(10, backButton, inviteButton);
 	    VBox vbox = new VBox(table);
 	    vbox.getChildren().addAll(hbox);
-        Scene scene = new Scene(vbox, 950, 400);
+        Scene scene = new Scene(vbox, 940, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX TableView with List<Users>");
         primaryStage.show();    
