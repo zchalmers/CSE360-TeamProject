@@ -239,7 +239,9 @@ public class AdminHomePage {
 							if (finalResult.isPresent() && finalResult.get() == ButtonType.OK) {
 								user.setPassword(OTP);
 								databaseHelper.updatePassword(user.getUsername(), OTP);
-								System.out.println(user.getPassword()); // debug
+								user.setOTPFlag(true);
+								databaseHelper.updateOTPFlag(user.getUsername(), true);
+								System.out.println(user.getPassword()); // Debug
 							}
 						}
 					}
