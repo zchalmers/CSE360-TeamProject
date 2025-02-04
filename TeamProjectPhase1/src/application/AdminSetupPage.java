@@ -92,7 +92,7 @@ public class AdminSetupPage {
         VBox layout = new VBox(10, userLabel, userNameField, nameField, emailField, passwordField, setupButton, errorLabel);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
-        primaryStage.setScene(new Scene(layout, 800, 400));
+        primaryStage.setScene(new Scene(layout, 940, 400));
         primaryStage.setTitle("Administrator Setup");
         primaryStage.show();
     }
