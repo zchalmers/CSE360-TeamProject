@@ -3,9 +3,9 @@
 
 ### Contents
 
-1. Team Project Phase 1 - file containing Team Project Phase 1 program submission
-3. Screencast File - file containing both screencasts 1 and 2 as well as their plan documents
-5. Standup Meetings File - file containing Standup Meeting recordings and notes
+1. Team_Project_Phase_1 - file containing Team Project Phase 1 program submission
+3. Screencast_File - file containing both screencasts 1 and 2 as well as their plan documents
+5. Standup_Meetings_File - file containing Standup Meeting recordings and notes
 
 
 This is a WIP project program that is meant to be a trusted Q&A search program that will allow a user to login, generate invite codes to invite new members, maintain the database of users including their roles/password-reset, and much more. Many features are not yet implemented as we add support for additional user roles and interactions. 
