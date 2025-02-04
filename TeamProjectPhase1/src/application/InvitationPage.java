@@ -53,7 +53,7 @@ public class InvitationPage {
         });
 
         layout.getChildren().addAll( userLabel, showCodeButton, inviteCodeLabel, quitButton);
-	    Scene inviteScene = new Scene(layout, 800, 400);
+	    Scene inviteScene = new Scene(layout, 940, 400);
 
 	    // Set the scene to primary stage
 	    primaryStage.setScene(inviteScene);
