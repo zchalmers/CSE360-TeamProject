@@ -8,6 +8,7 @@ import java.util.Optional;
 import databasePart1.DatabaseHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -45,8 +46,7 @@ public class AdminHomePage {
 	    	
 	    } catch (SQLException e) {
 	    	System.out.println("Should never reach here, can't get all users");
-	    }
-	    
+	    }	    
 	    
 	    TableColumn<User, String> usernames = new TableColumn<>("Username");
         usernames.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -127,32 +127,102 @@ public class AdminHomePage {
 	    });
 	    
 	    TableColumn<User, Void> changeRole = new TableColumn<>("Change Role");
-	    changeRole.setCellFactory(tc -> new TableCell<>() {
-	        private final Button button = new Button("Change");
+	    changeRole.setCellFactory(tc -> new TableCell<>() {	    	
+	    	private final ComboBox<String> comboBox = new ComboBox<>();
+			private final Button addOrRemove = new Button("Add/Remove");	        
+			private final HBox hbox = new HBox(5, comboBox, addOrRemove);
+			
+			{
+			// Populate comboBox
+			comboBox.getItems().addAll("Admin", "Student", "Instructor", "Staff");
+			comboBox.setPromptText("Select a role");
+			
+			// Center the text in the dropdown list of the comboBox
+			comboBox.setCellFactory(a -> new ListCell<String>() {
+				@Override
+				protected void updateItem(String role, boolean flag) {
+					super.updateItem(role, flag);
+
+					if (!flag && role != null) {
+						setText(role.substring(0, 1).toUpperCase() + role.substring(1));
+						setAlignment(Pos.CENTER);
+					}
+					
+				}
+			});
+			
+			// Center the text in the comboBox selection
+			comboBox.setButtonCell(new ListCell<String>() {
+				@Override
+				protected void updateItem(String role, boolean flag) {
+					super.updateItem(role, flag);
+
+					if (!flag && role != null) {
+						setText(role.substring(0, 1).toUpperCase() + role.substring(1));
+						setAlignment(Pos.CENTER);
+					}
+					
+				}
+			});
+			
+	        comboBox.setOnAction(a -> {
+	            String check = comboBox.getValue();
+	            addOrRemove.setDisable(check == null);
+	            
+	            
+	        });
 	        
-	        {   
-	        	button.setOnAction(event -> {
-	        		User personBeingChanged = getTableView().getItems().get(getIndex());
-	        		new EditRolesPage(helper).show(primaryStage,personBeingChanged);
-	                
-	            });
-	        }
 	        
-	        @Override
+	        addOrRemove.setOnAction(a -> {
+	        	try {
+	                String roleToAdd = comboBox.getSelectionModel().getSelectedItem();
+	                if (roleToAdd == null) {
+	                    return;
+	                }
+	                if (!user.getRoles().contains(roleToAdd)) {
+	                    System.out.println(user.getRoles() + "\n" + roleToAdd);
+	                    // System.out.println(!user.getRoles().contains(roleToAdd));
+	                    helper.addRoles(user.getUsername(), roleToAdd);
+	                    new AdminHomePage(helper).show(primaryStage, user);
+	                    } else {
+	                        if(roleToAdd.equals("Admin")) {
+	                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	                            alert.setTitle("STOP!!");
+	                            alert.setHeaderText("You cannot delete the 'Admin' role");
+	                            alert.setContentText("An admin role cannot be deleted");
+
+	                            Optional<ButtonType> result = alert.showAndWait();
+	                        }
+	                        else {
+	                    System.out.println("User has this role, deleting role. ");
+	                    helper.removeRoles(user.getUsername(), roleToAdd);
+	                    new AdminHomePage(helper).show(primaryStage, user);
+	                        }
+	                }
+	            } catch (SQLException e) {
+	                System.out.println(
+	                        "Should print this after trying to add the role since I don't know the format for role");
+	            }
+	        });
+			}
+			
+			@Override
 	        protected void updateItem(Void item, boolean empty) {
 	            super.updateItem(item, empty);
 	            if (empty) {
 	                setGraphic(null);
 	            } else {
-	                setGraphic(button);
+	                setGraphic(hbox);
 	            }
 	        }
-	        
+			
 	    });
+	    
+	    
 	    
 	    TableColumn<User, Void> tempPassword = new TableColumn<>("Forgot Password");
 	    tempPassword.setCellFactory(tc -> new TableCell<>() {
-	        private final Button button = new Button("Set One Time Password");
+	        private final Button button = new Button("One Time Password");
 
 	        {
 	            button.setOnAction(event -> {
@@ -204,10 +274,7 @@ public class AdminHomePage {
 	                setGraphic(button);
 	            }
 	        }
-	    });
-
-
-	    
+	    });	    
 	    
 	    table.getColumns().add(changeRole);
 	    table.getColumns().add(deleteColumn);
@@ -216,12 +283,10 @@ public class AdminHomePage {
 	    HBox hbox = new HBox(10, backButton, inviteButton);
 	    VBox vbox = new VBox(table);
 	    vbox.getChildren().addAll(hbox);
-        Scene scene = new Scene(vbox, 800, 400);
+        Scene scene = new Scene(vbox, 950, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX TableView with List<Users>");
-        primaryStage.show();
-        
- 
-    }
+        primaryStage.show();    
+     }
        
 }
