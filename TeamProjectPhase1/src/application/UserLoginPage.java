@@ -85,12 +85,12 @@ public class UserLoginPage {
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
 			if (!userNameValidate.isEmpty()) {
-				errorLabel.setText(userNameValidate);
+				errorLabel.setText("***ERROR*** Invalid username");
 				return;
 			}
 
 			if (!passwordValidate.isEmpty()) {
-				errorLabel.setText(passwordValidate);
+				errorLabel.setText("***ERROR*** Invalid password");
 				return;
 			}
 
