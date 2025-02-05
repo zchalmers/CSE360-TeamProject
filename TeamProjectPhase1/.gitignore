@@ -1,3 +1,5 @@
 /databasePart1/
 /application/
 *.class
+*.classPath
+.classPath

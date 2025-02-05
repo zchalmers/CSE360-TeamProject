@@ -82,6 +82,11 @@ public class AdminSetupPage {
 				return;
 			}
 
+			if (!emailValidate.isEmpty()) {
+				errorLabel.setText(emailValidate);
+				return;
+			}
+
 			if (!passwordValidate.isEmpty()) {
 				errorLabel.setText(passwordValidate);
 				return;

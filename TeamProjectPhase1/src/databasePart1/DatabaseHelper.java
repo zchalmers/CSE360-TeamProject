@@ -255,6 +255,11 @@ public class DatabaseHelper {
 	// Validates a user's login credentials.
 	public User login(String username, String password) throws SQLException {
 		String query = "SELECT * FROM cse360users WHERE userName = ? AND (password = ? OR otp = TRUE) AND password <> ''";
+		if (connection == null) {
+			connectToDatabase();
+			System.out.println("CONNECTIONCONNECTIONCONNECTION: " + connection.toString());	
+		}
+		
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
