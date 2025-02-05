@@ -15,11 +15,6 @@ import javafx.geometry.Pos;
  * user to select which role they which to play.
  */
 public class RoleSelectPage {
-	/**
-	 * Displays the role-selection page.
-	 * 
-	 * @param primaryStage The primary stage where the scene will be displayed.
-	 */
 	private final DatabaseHelper databaseHelper;
 	String selectedRole;
 	User user;
@@ -29,6 +24,11 @@ public class RoleSelectPage {
 		user = databaseHelper.currentUser;
 	}
 
+	/**
+	 * Displays the role-selection page. *
+	 * 
+	 * @param primaryStage The primary stage where the scene will be displayed.
+	 */
 	public void show(Stage primaryStage) {
 
 		// Create Next and Back buttons
@@ -71,7 +71,7 @@ public class RoleSelectPage {
 			// Set currentRole in databaseHelper
 			databaseHelper.currentUser.setCurrentRole(selectedRole);
 
-			// Direct user to role's home page
+			// Direct user to role's home page based on user selection
 			switch (selectedRole) {
 			case "Admin":
 				new AdminHomePage(databaseHelper).show(primaryStage, user);
@@ -102,6 +102,7 @@ public class RoleSelectPage {
 		// Attach buttons and combobox to the same container
 		layoutV.getChildren().addAll(comboBox, layoutH);
 
+		// Create scene to hold UI objects
 		Scene roleSelectScene = new Scene(layoutV, 940, 400);
 
 		// Set the scene to primary stage
@@ -114,6 +115,7 @@ public class RoleSelectPage {
 			protected void updateItem(String role, boolean flag) {
 				super.updateItem(role, flag);
 
+				// If not empty, capitalize first letter and center text
 				if (!flag && role != null) {
 					setText(role.substring(0, 1).toUpperCase() + role.substring(1));
 					setAlignment(Pos.CENTER);
@@ -127,6 +129,7 @@ public class RoleSelectPage {
 			protected void updateItem(String role, boolean flag) {
 				super.updateItem(role, flag);
 
+				// If not empty, capitalize first letter and center text
 				if (!flag && role != null) {
 					setText(role.substring(0, 1).toUpperCase() + role.substring(1));
 					setAlignment(Pos.CENTER);

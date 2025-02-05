@@ -1,10 +1,6 @@
 package databasePart1;
 
 import java.sql.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,18 +28,16 @@ public class DatabaseHelper {
 	private Statement statement = null;
 
 	public User currentUser;
-	public User tempUser;
 
 	public void connectToDatabase() throws SQLException {
 		try {
-
 			Class.forName(JDBC_DRIVER); // Load the JDBC driver
 			System.out.println("Connecting to database...");
 			connection = DriverManager.getConnection(DB_URL, USER, PASS);
 
 			statement = connection.createStatement();
 			// You can use this command to clear the database and restart from fresh.
-			 statement.execute("DROP ALL OBJECTS");
+			statement.execute("DROP ALL OBJECTS");
 			// System.out.println("Database cleared successfully.");
 
 			createTables();
@@ -268,29 +262,23 @@ public class DatabaseHelper {
 				if (rs.next()) {
 					boolean otp = rs.getBoolean("otp");
 					String storedPW = rs.getString("password");
-
+					
+					// If password is blank, login fails - password is set to blank after logging in with a one-time password
 					if (storedPW.isEmpty()) {
 						System.out.println("Password is empty."); // Debug
 						return null;
 					}
-
 					if (otp) {
-						// Reset otp for user and set password to "" or blank
-						tempUser = getUser(username);//used to pass a true otp value past the login
-						tempUser.setOTPFlag(true);//sets the temp otp value to true
-						
-						
-						String updateQuery = "UPDATE cse360users SET password = '', otp = FALSE WHERE userName = ?";						
+						// Reset password to "" or blank
+						String updateQuery = "UPDATE cse360users SET password = '' WHERE userName = ?";
 						try (PreparedStatement updatepstmt = connection.prepareStatement(updateQuery)) {
 							updatepstmt.setString(1, username);
-							updatepstmt.executeUpdate();
-							return tempUser;
+							updatepstmt.executeUpdate();							
 						}
 					}
-					currentUser = getUser(username);//debug
+					currentUser = getUser(username);// debug
 					return currentUser;
 				}
-
 				return null;
 			}
 		}
@@ -353,21 +341,20 @@ public class DatabaseHelper {
 		String OTP = "";
 		Random random = new Random();
 		int rand = 0;
-		
+
 		for (int i = 0; i < 6; i++) {
 			rand = random.nextInt(25);
-			
+
 			if (i % 2 == 0) {
 				OTP = OTP + lower.charAt(rand);
-			}
-			else {
+			} else {
 				OTP = OTP + upper.charAt(rand);
 			}
 		}
-		
+
 		rand = random.nextInt(9);
 		OTP = OTP + num.charAt(rand);
-		rand = random.nextInt(special.length()-1);
+		rand = random.nextInt(special.length() - 1);
 		OTP = OTP + special.charAt(rand);
 		return OTP;
 	}

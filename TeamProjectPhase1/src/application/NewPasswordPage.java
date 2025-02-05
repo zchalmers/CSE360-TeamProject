@@ -4,7 +4,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import databasePart1.*;
@@ -35,8 +39,7 @@ public class NewPasswordPage {
 		Label errorLabel = new Label();
 		errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
 
-		Button saveChanges = new Button("Save");
-		
+		Button saveChanges = new Button("Save");		
 
 		// Set saveChanges button as default to allow pressing Enter to activate
 		saveChanges.setDefaultButton(true);
@@ -57,11 +60,13 @@ public class NewPasswordPage {
 					
 					errorLabel.setText("***Success*** Password Changed");
 					databaseHelper.updatePassword(user.getUsername(),password);
+					
+					databaseHelper.updateOTPFlag(user.getUsername(), false);
+					
 					new UserLoginPage(databaseHelper).show(primaryStage);
 					return;
 				}
-			}
-			
+			}			
 		});
 
 			
