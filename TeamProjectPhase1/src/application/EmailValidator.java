@@ -2,37 +2,10 @@ package application;
 
 public class EmailValidator {
 	/**
-	 * <p>
-	 * Title: FSM-translated NameValidator.
-	 * </p>
-	 * 
-	 * <p>
-	 * Description: A demonstration of the mechanical translation of Finite State
-	 * Machine diagram into an executable Java program using the Name
-	 * Recognizer. The code detailed design is based on a while loop with a select
-	 * list
-	 * </p>
-	 * 
-	 * <p>
 	 * Copyright: Lynn Robert Carter © 2024
-	 * </p>
 	 * 
 	 * @author Lynn Robert Carter
-	 * 
-	 * @version 1.00 2024-09-13 Initial baseline derived from the Even Recognizer
-	 * @version 1.01 2024-09-17 Correction to address UNChar coding error, improper
-	 *          error message, and improve internal documentation
-	 * @version 1.02 2025-01-19 Adjustments to FSM to only accept alphabetic char in
-	 *          first step and to allow - and _ along with . between chars
-	 */
-
-	/**********************************************************************************************
-	 * 
-	 * Result attributes to be used for GUI applications where a detailed error
-	 * message and a pointer to the character of the error will enhance the user
-	 * experience.
-	 * 
-	 */
+	 **/
 
 	public static String emailRecognizerErrorMessage = ""; // The error message text
 	public static String emailRecognizerInput = ""; // The input being processed
@@ -47,7 +20,8 @@ public class EmailValidator {
 									// running
 	private static int nameSize = 0; // A numeric value may not exceed 16 characters
 	private static int nextCharIndex;
-	private static char nextChar = 1; 
+	private static char nextChar = 1;
+
 	// Private method to display debugging data
 	private static void displayDebuggingInfo() {
 		// Display the current state of the FSM as part of an execution trace
@@ -68,8 +42,7 @@ public class EmailValidator {
 		currentCharNdx++;
 		if (currentCharNdx < inputLine.length()) {
 			currentChar = inputLine.charAt(currentCharNdx);
-		}
-		else {
+		} else {
 			currentChar = ' ';
 			running = false;
 		}
@@ -135,18 +108,15 @@ public class EmailValidator {
 					// Count the character
 					nameSize++;
 				}
-				
-				else if ((currentChar >= 'A' && currentChar <= 'Z') || 
-						(currentChar >= 'a' && currentChar <= 'z') ||
-						(currentChar >= '0') && (currentChar <= '9')) { // Check for A-Z, ', -
+
+				else if ((currentChar >= 'A' && currentChar <= 'Z') || (currentChar >= 'a' && currentChar <= 'z')
+						|| (currentChar >= '0') && (currentChar <= '9')) { // Check for A-Z, ', -
 					System.out.println("CURRENTCHAR: " + currentChar);
 					System.out.println("ASCII" + (int) currentChar);
 					nextState = 0;
-				
+
 					// Count the character
 					nameSize++;
-					
-
 
 					// This only occurs once, so there is no need to check for the size getting
 					// too large.
@@ -156,34 +126,13 @@ public class EmailValidator {
 					running = false;
 				}
 
-
 				// The execution of this state is finished
 				break;
 
-//			case 1:
-//				// State 1 has one valid transitions,
-//				// 1: a-z, ', - that transitions back to state 1
-//				if ((currentChar == '@')) { // Check for ' or minus
-//					nextState = 2;
-//
-//					// Count the character
-//					nameSize++;
-//				}	
-//				// If it is none of those characters, the FSM halts
-//				else
-//					running = false;
-//
-//				// The execution of this state is finished
-//				// If the size is larger than 50, the loop must stop
-//				if (nameSize > 50)
-//					running = false;
-//				break;
-			
-			case 1: 
-				if ((currentChar >= 'A' && currentChar <= 'Z') || 
-						(currentChar >= 'a' && currentChar <= 'z') ||
-						(currentChar == '.')) {
-					
+			case 1:
+				if ((currentChar >= 'A' && currentChar <= 'Z') || (currentChar >= 'a' && currentChar <= 'z')
+						|| (currentChar == '.')) {
+
 					nextState = 1;
 					nameSize++;
 
@@ -197,8 +146,8 @@ public class EmailValidator {
 				if (nameSize > 50)
 					running = false;
 				break;
-			}	
-			
+			}
+
 			if (running) {
 				displayDebuggingInfo();
 				// When the processing of a state has finished, the FSM proceeds to the next
@@ -240,7 +189,7 @@ public class EmailValidator {
 		switch (state) {
 		case 0:
 			// State 0 is not a final state, so we can return a very specific error message
-			emailRecognizerErrorMessage += "A email may only contain A-Z, a-z, or 0-9 or those before the @ .\n";
+			emailRecognizerErrorMessage += "An email may only contain A-Z, a-z, or 0-9 or those before the @ .\n";
 			return emailRecognizerErrorMessage;
 
 		case 1:
@@ -253,11 +202,11 @@ public class EmailValidator {
 				return emailRecognizerErrorMessage;
 			} else if (nameSize > 50) {
 				// Name is too long
-				emailRecognizerErrorMessage += "A email must have no more than 50 characters.\n";
+				emailRecognizerErrorMessage += "An email must have no more than 50 characters.\n";
 				return emailRecognizerErrorMessage;
 			} else if (currentCharNdx < input.length()) {
 				// There are characters remaining in the input, so the input is not valid
-				emailRecognizerErrorMessage += "After the first character, a Name may only contain the characters A-Z, a-z, a @ or a period.\n";
+				emailRecognizerErrorMessage += "After the first character, an email may only contain the characters A-Z, a-z, a @ or a period.\n";
 				return emailRecognizerErrorMessage;
 			} else {
 				// Name is valid

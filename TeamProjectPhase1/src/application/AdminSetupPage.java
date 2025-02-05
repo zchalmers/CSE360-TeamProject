@@ -69,8 +69,8 @@ public class AdminSetupPage {
 			// Using FSM to validate Password
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 			
-			// Calling imported .validate() method to validate syntax
-			String emailValidate = NameValidator.checkForValidName(name);
+			// Using FSM to validate email syntax
+			String emailValidate = EmailValidator.checkForValidEmail(email);
 
 			if (!userNameValidate.isEmpty()) {
 				errorLabel.setText(userNameValidate);

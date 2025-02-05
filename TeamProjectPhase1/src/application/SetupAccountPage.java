@@ -75,12 +75,18 @@ public class SetupAccountPage {
 			String email = emailField.getText();
 			String password = passwordField.getText();
 			String code = inviteCodeField.getText();
-
+			
+			// Using FSM to validate the username
 			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
-
+			
+			// Using FSM to validate the name
 			String nameValidate = NameValidator.checkForValidName(name);
-
+			
+			// Using FSM to validate the password
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
+			
+			// Using FSM to validate the email syntax
+			String emailValidate = EmailValidator.checkForValidEmail(email);
 
 			if (!userNameValidate.isEmpty()) {
 				errorLabel.setText(userNameValidate);
@@ -94,6 +100,11 @@ public class SetupAccountPage {
 
 			if (!passwordValidate.isEmpty()) {
 				errorLabel.setText(passwordValidate);
+				return;
+			}
+			
+			if (!emailValidate.isEmpty()) {
+				errorLabel.setText(emailValidate);
 				return;
 			}
 

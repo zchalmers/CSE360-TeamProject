@@ -55,7 +55,7 @@ public class NameValidator {
 		// Check to ensure that there is input to process
 		if (input.length() <= 0) {
 			nameRecognizerIndexofError = 0; // Error at first character;
-			return "\n*** ERROR *** The name is empty!!";
+			return "\n*** ERROR *** The name field is empty!!";
 		}
 
 		// The local variables used to perform the Finite State Machine simulation
