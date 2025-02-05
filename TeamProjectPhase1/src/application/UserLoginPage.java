@@ -103,6 +103,20 @@ public class UserLoginPage {
 
 			try {
 				User user = databaseHelper.login(userName, password);
+				
+
+				
+				System.out.print("\n The otp value is " + user.getOTPFlag(true) + "\n");//debug
+				
+				if(user.getOTPFlag(true)) {
+					
+					System.out.print("Your if statement works\n");//debug
+
+					new NewPasswordPage(databaseHelper).show(primaryStage, user);
+					return;
+
+					
+				}
 
 				if (user != null) {
 					if (user.getRoles().size() > 1) {

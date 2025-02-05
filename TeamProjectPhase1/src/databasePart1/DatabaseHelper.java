@@ -32,6 +32,7 @@ public class DatabaseHelper {
 	private Statement statement = null;
 
 	public User currentUser;
+	public User tempUser;
 
 	public void connectToDatabase() throws SQLException {
 		try {
@@ -42,7 +43,7 @@ public class DatabaseHelper {
 
 			statement = connection.createStatement();
 			// You can use this command to clear the database and restart from fresh.
-			// statement.execute("DROP ALL OBJECTS");
+			 statement.execute("DROP ALL OBJECTS");
 			// System.out.println("Database cleared successfully.");
 
 			createTables();
@@ -270,14 +271,18 @@ public class DatabaseHelper {
 
 					if (otp) {
 						// Reset otp for user and set password to "" or blank
-						String updateQuery = "UPDATE cse360users SET password = '', otp = FALSE WHERE userName = ?";
+						tempUser = getUser(username);//used to pass a true otp value past the login
+						tempUser.setOTPFlag(true);//sets the temp otp value to true
+						
+						
+						String updateQuery = "UPDATE cse360users SET password = '', otp = FALSE WHERE userName = ?";						
 						try (PreparedStatement updatepstmt = connection.prepareStatement(updateQuery)) {
 							updatepstmt.setString(1, username);
 							updatepstmt.executeUpdate();
+							return tempUser;
 						}
 					}
-
-					currentUser = getUser(username);
+					currentUser = getUser(username);//debug
 					return currentUser;
 				}
 
