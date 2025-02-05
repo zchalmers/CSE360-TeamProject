@@ -28,11 +28,9 @@ public class DatabaseHelper {
 	private Statement statement = null;
 
 	public User currentUser;
-	public User tempUser;
 
 	public void connectToDatabase() throws SQLException {
 		try {
-
 			Class.forName(JDBC_DRIVER); // Load the JDBC driver
 			System.out.println("Connecting to database...");
 			connection = DriverManager.getConnection(DB_URL, USER, PASS);
