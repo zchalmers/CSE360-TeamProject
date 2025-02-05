@@ -1,38 +1,8 @@
 package application;
 
 public class UserNameRecognizer {
-	/**
-	 * <p>
-	 * Title: FSM-translated UserNameRecognizer.
-	 * </p>
-	 * 
-	 * <p>
-	 * Description: A demonstration of the mechanical translation of Finite State
-	 * Machine diagram into an executable Java program using the UserName
-	 * Recognizer. The code detailed design is based on a while loop with a select
-	 * list
-	 * </p>
-	 * 
-	 * <p>
-	 * Copyright: Lynn Robert Carter © 2024
-	 * </p>
-	 * 
-	 * @author Lynn Robert Carter
-	 * 
-	 * @version 1.00 2024-09-13 Initial baseline derived from the Even Recognizer
-	 * @version 1.01 2024-09-17 Correction to address UNChar coding error, improper
-	 *          error message, and improve internal documentation
-	 * @version 1.02 2025-01-19 Adjustments to FSM to only accept alphabetic char in
-	 *          first step and to allow - and _ along with . between chars
-	 */
-
-	/**********************************************************************************************
-	 * 
-	 * Result attributes to be used for GUI applications where a detailed error
-	 * message and a pointer to the character of the error will enhance the user
-	 * experience.
-	 * 
-	 */
+	// Copyright: Lynn Robert Carter © 2024
+	// @author Lynn Robert Carter
 
 	public static String userNameRecognizerErrorMessage = ""; // The error message text
 	public static String userNameRecognizerInput = ""; // The input being processed

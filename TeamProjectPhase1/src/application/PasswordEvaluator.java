@@ -1,36 +1,8 @@
 package application;
 
 public class PasswordEvaluator {
-	/**
-	 * <p>
-	 * Title: Directed Graph-translated Password Assessor.
-	 * </p>
-	 * 
-	 * <p>
-	 * Description: A demonstration of the mechanical translation of Directed Graph
-	 * diagram into an executable Java program using the Password Evaluator Directed
-	 * Graph. The code detailed design is based on a while loop with a cascade of if
-	 * statements
-	 * </p>
-	 * 
-	 * <p>
-	 * Copyright: Lynn Robert Carter © 2022
-	 * </p>
-	 * 
-	 * @author Lynn Robert Carter
-	 * 
-	 * @version 0.00 2018-02-22 Initial baseline
-	 * @version 0.01 2025-01-20 Added comments to while loop
-	 * 
-	 */
-
-	/**********************************************************************************************
-	 * 
-	 * Result attributes to be used for GUI applications where a detailed error
-	 * message and a pointer to the character of the error will enhance the user
-	 * experience.
-	 * 
-	 */
+	// Copyright: Lynn Robert Carter © 2024
+	// @author Lynn Robert Carter
 
 	public static String passwordErrorMessage = ""; // The error message text
 	public static String passwordInput = ""; // The input being processed

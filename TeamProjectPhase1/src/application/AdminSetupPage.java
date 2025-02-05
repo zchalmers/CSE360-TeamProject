@@ -53,17 +53,24 @@ public class AdminSetupPage {
 		errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
 
 		setupButton.setOnAction(a -> {
+			
 			// Retrieve user input
 			String userName = userNameField.getText();
 			String name = nameField.getText();
 			String email = emailField.getText();
 			String password = passwordField.getText();
+			
 			// Using FSM to validate
 			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
+			
 			// Using FSM to validate name
 			String nameValidate = NameValidator.checkForValidName(name);
+			
 			// Using FSM to validate Password
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
+			
+			// Calling imported .validate() method to validate syntax
+			String emailValidate = NameValidator.checkForValidName(name);
 
 			if (!userNameValidate.isEmpty()) {
 				errorLabel.setText(userNameValidate);
