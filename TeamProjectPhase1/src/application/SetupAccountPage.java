@@ -3,6 +3,7 @@ package application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -59,6 +60,14 @@ public class SetupAccountPage {
 		Button setupButton = new Button("Setup");
 		setupButton.setDefaultButton(true);
 
+		// Create button to return to login screen
+		Button quitButton = new Button("Back to login");
+
+		// Quit button to return to User Login Screen
+		quitButton.setOnAction(a -> {
+			new UserLoginPage(databaseHelper).show(primaryStage);
+		});
+
 		setupButton.setOnAction(a -> {
 			// Retrieve user input
 			String userName = userNameField.getText();
@@ -109,9 +118,12 @@ public class SetupAccountPage {
 			}
 		});
 
+		HBox hbox = new HBox(5, setupButton, quitButton);
+		hbox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
 		VBox layout = new VBox(10);
 		layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-		layout.getChildren().addAll(userNameField, nameField, emailField, passwordField, inviteCodeField, setupButton,
+		layout.getChildren().addAll(userNameField, nameField, emailField, passwordField, inviteCodeField, hbox,
 				errorLabel);
 
 		primaryStage.setScene(new Scene(layout, 940, 400));
