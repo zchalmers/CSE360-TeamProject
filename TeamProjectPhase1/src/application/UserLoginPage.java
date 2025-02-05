@@ -24,7 +24,7 @@ public class UserLoginPage {
 	// Method to include direction to the necessary role pages
 	private void roleHomePage(User user, Stage primaryStage) {
 		if (user.getRoles().size() > 0) {
-			
+
 			switch (user.getRoles().get(0).toLowerCase()) {
 			case "admin":
 				databaseHelper.setUserCurrentRole("admin");
@@ -53,13 +53,12 @@ public class UserLoginPage {
 
 			default:
 				databaseHelper.setUserCurrentRole("user");
-				new UserHomePage(user).show(primaryStage);
+				new UserHomePage(databaseHelper).show(primaryStage);
 				break;
 			}
-		}
-		else {
+		} else {
 			databaseHelper.setUserCurrentRole("user");
-			new UserHomePage(user).show(primaryStage);
+			new UserHomePage(databaseHelper).show(primaryStage);
 		}
 	}
 
@@ -103,40 +102,34 @@ public class UserLoginPage {
 
 			try {
 				User user = databaseHelper.login(userName, password);
-				
 
-				
-				System.out.print("\n The otp value is " + user.getOTPFlag(true) + "\n");//debug
-				
-				if(user.getOTPFlag(true)) {
-					
-					System.out.print("Your if statement works\n");//debug
-
-					new NewPasswordPage(databaseHelper).show(primaryStage, user);
-					return;
-
-					
-				}
-
-				if (user != null) {
-					if (user.getRoles().size() > 1) {
-						new RoleSelectPage(databaseHelper).show(primaryStage);
-					} else {
-						roleHomePage(user, primaryStage);
-					}
-				}
-
-				else {
+				if (user == null) {
 					// Display an error if the login fails
 					errorLabel.setText("Error logging in. Contact an Administrator.");
+					return;
 				}
 
+				System.out.print("\n The otp value is " + user.getOTPFlag() + "\n");// debug
+
+				if (user.getOTPFlag()) {
+					System.out.print("Your if statement works\n");// debug
+					new NewPasswordPage(databaseHelper).show(primaryStage, user);
+				}
+
+				// If user has more than one role, send them to RoleSelectPage otherwise call
+				// roleHomePage() method
+				if (user.getRoles().size() > 1) {
+					new RoleSelectPage(databaseHelper).show(primaryStage);
+				} else {
+					roleHomePage(user, primaryStage);
+				}
 			} catch (SQLException e) {
 				System.err.println("Database error: " + e.getMessage());
 				e.printStackTrace();
 			}
 		});
-
+		
+		// Button to register a new account
 		setupButton.setOnAction(a -> {
 			new SetupAccountPage(databaseHelper).show(primaryStage);
 		});

@@ -59,7 +59,7 @@ public class User {
 		return this.roles;
 	}
 	
-	public boolean getOTPFlag(boolean flag) {
+	public boolean getOTPFlag() {
 		return this.otp;
 	}
 

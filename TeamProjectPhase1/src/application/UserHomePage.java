@@ -12,10 +12,12 @@ import databasePart1.DatabaseHelper;
  * This page displays a simple welcome message for the user.
  */
 public class UserHomePage {
+	private final DatabaseHelper databaseHelper;
 	private User user;
 
-	public UserHomePage(User user) {
-		this.user = user;
+	public UserHomePage(DatabaseHelper databaseHelper) {
+		this.databaseHelper = databaseHelper;
+		user = databaseHelper.currentUser;
 	}
 
 	public void show(Stage primaryStage) {
@@ -30,7 +32,7 @@ public class UserHomePage {
 		// Button to return to the login screen
 		Button quitButton = new Button("Back to login");
 		quitButton.setOnAction(event -> {
-			new UserLoginPage(new DatabaseHelper()).show(primaryStage);
+			new UserLoginPage(databaseHelper).show(primaryStage);
 		});
 
 		layout.getChildren().addAll(userLabel, quitButton); // Including logout button
