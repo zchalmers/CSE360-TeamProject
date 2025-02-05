@@ -23,36 +23,43 @@ public class UserLoginPage {
 
 	// Method to include direction to the necessary role pages
 	private void roleHomePage(User user, Stage primaryStage) {
-		switch (user.getRoles().get(0).toLowerCase()) {
-		case "admin":
-			databaseHelper.setUserCurrentRole("admin");
-			new AdminHomePage(databaseHelper).show(primaryStage, user);
-			break;
+		if (user.getRoles().size() > 0) {
+			
+			switch (user.getRoles().get(0).toLowerCase()) {
+			case "admin":
+				databaseHelper.setUserCurrentRole("admin");
+				new AdminHomePage(databaseHelper).show(primaryStage, user);
+				break;
 
-		case "student":
-			databaseHelper.setUserCurrentRole("student");
-			new StudentHomePage(databaseHelper).show(primaryStage);
-			break;
+			case "student":
+				databaseHelper.setUserCurrentRole("student");
+				new StudentHomePage(databaseHelper).show(primaryStage);
+				break;
 
-		case "instructor":
-			databaseHelper.setUserCurrentRole("instructor");
-			new InstructorHomePage(databaseHelper).show(primaryStage);
-			break;
+			case "instructor":
+				databaseHelper.setUserCurrentRole("instructor");
+				new InstructorHomePage(databaseHelper).show(primaryStage);
+				break;
 
-		case "staff":
-			databaseHelper.setUserCurrentRole("staff");
-			new StaffHomePage(databaseHelper).show(primaryStage);
-			break;
+			case "staff":
+				databaseHelper.setUserCurrentRole("staff");
+				new StaffHomePage(databaseHelper).show(primaryStage);
+				break;
 
-		case "reviewer":
-			databaseHelper.setUserCurrentRole("reviewer");
-			new ReviewerHomePage(databaseHelper).show(primaryStage);
-			break;
+			case "reviewer":
+				databaseHelper.setUserCurrentRole("reviewer");
+				new ReviewerHomePage(databaseHelper).show(primaryStage);
+				break;
 
-		default:
+			default:
+				databaseHelper.setUserCurrentRole("user");
+				new UserHomePage(user).show(primaryStage);
+				break;
+			}
+		}
+		else {
 			databaseHelper.setUserCurrentRole("user");
 			new UserHomePage(user).show(primaryStage);
-			break;
 		}
 	}
 

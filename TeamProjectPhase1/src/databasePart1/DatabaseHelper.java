@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import application.User;
@@ -335,7 +336,30 @@ public class DatabaseHelper {
 	}
 
 	public String generateOneTimePassword() {
-		return "Password1!";
+		String special = "~`!@#$%^&*()_-+={}[]|\\\\:;\\\"'<>,.?/";
+		String num = "0123456789";
+		String lower = "abcdefghijklmnopqrstuvwxyz";
+		String upper = lower.toUpperCase();
+		String OTP = "";
+		Random random = new Random();
+		int rand = 0;
+		
+		for (int i = 0; i < 6; i++) {
+			rand = random.nextInt(25);
+			
+			if (i % 2 == 0) {
+				OTP = OTP + lower.charAt(rand);
+			}
+			else {
+				OTP = OTP + upper.charAt(rand);
+			}
+		}
+		
+		rand = random.nextInt(9);
+		OTP = OTP + num.charAt(rand);
+		rand = random.nextInt(special.length()-1);
+		OTP = OTP + special.charAt(rand);
+		return OTP;
 	}
 
 	// Validates an invitation code to check if it is unused.

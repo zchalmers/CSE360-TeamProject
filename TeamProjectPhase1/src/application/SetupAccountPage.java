@@ -99,7 +99,7 @@ public class SetupAccountPage {
 
 						// Create a new user and register them in the database
 						List<String> roles = new ArrayList<>();
-
+						
 						User user = new User(userName, name, password, email, roles);
 						databaseHelper.register(user);
 
