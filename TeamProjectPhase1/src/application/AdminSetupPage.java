@@ -60,11 +60,18 @@ public class AdminSetupPage {
 			String password = passwordField.getText();
 			// Using FSM to validate
 			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
+			// Using FSM to validate name
+			String nameValidate = NameValidator.checkForValidName(name);
 			// Using FSM to validate Password
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
 			if (!userNameValidate.isEmpty()) {
 				errorLabel.setText(userNameValidate);
+				return;
+			}
+
+			if (!nameValidate.isEmpty()) {
+				errorLabel.setText(nameValidate);
 				return;
 			}
 

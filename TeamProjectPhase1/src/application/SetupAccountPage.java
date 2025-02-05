@@ -78,10 +78,17 @@ public class SetupAccountPage {
 
 			String userNameValidate = UserNameRecognizer.checkForValidUserName(userName);
 
+			String nameValidate = NameValidator.checkForValidName(name);
+
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
 			if (!userNameValidate.isEmpty()) {
 				errorLabel.setText(userNameValidate);
+				return;
+			}
+
+			if (!nameValidate.isEmpty()) {
+				errorLabel.setText(nameValidate);
 				return;
 			}
 
