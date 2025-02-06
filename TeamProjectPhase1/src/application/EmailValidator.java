@@ -18,9 +18,7 @@ public class EmailValidator {
 	private static int currentCharNdx; // The index of the current character
 	private static boolean running; // The flag that specifies if the FSM is
 									// running
-	private static int nameSize = 0; // A numeric value may not exceed 16 characters
-	private static int nextCharIndex;
-	private static char nextChar = 1;
+	private static int nameSize = 0; // A numeric value may not exceed 50 characters
 
 	// Private method to display debugging data
 	private static void displayDebuggingInfo() {
@@ -67,9 +65,8 @@ public class EmailValidator {
 		state = 0; // This is the FSM state number
 		inputLine = input; // Save the reference to the input line as a global
 		currentCharNdx = 0; // The index of the current character
-		nextCharIndex = 1;
 		currentChar = input.charAt(currentCharNdx); // The current character from above indexed position
-		nextChar = input.charAt(nextCharIndex);
+		//nextChar = input.charAt(nextCharIndex);
 		// The Finite State Machines continues until the end of the input is reached or
 		// at some
 		// state the current character does not match any valid transition to a next
@@ -103,18 +100,15 @@ public class EmailValidator {
 				// the FSM goes to state 1
 
 				// A-Z, ', - -> State 1
-				if ((currentChar == '@') && nameSize > 0) {
+				if (currentChar == '@' && nameSize > 1 && nameSize < 65) {
 					nextState = 1;
 					// Count the character
 					nameSize++;
 				}
 
 				else if ((currentChar >= 'A' && currentChar <= 'Z') || (currentChar >= 'a' && currentChar <= 'z')
-						|| (currentChar >= '0') && (currentChar <= '9')) { // Check for A-Z, ', -
-					System.out.println("CURRENTCHAR: " + currentChar);
-					System.out.println("ASCII" + (int) currentChar);
+						|| (currentChar >= '0') && (currentChar <= '9') || ("!#$%&'*+-/=?^_`{|}~.".indexOf(currentChar) != -1)) { // Check for A-Z, ', -
 					nextState = 0;
-
 					// Count the character
 					nameSize++;
 
@@ -131,7 +125,7 @@ public class EmailValidator {
 
 			case 1:
 				if ((currentChar >= 'A' && currentChar <= 'Z') || (currentChar >= 'a' && currentChar <= 'z')
-						|| (currentChar == '.')) {
+						|| (currentChar >= '0') && (currentChar <= '9') || (currentChar == '.')) {
 
 					nextState = 1;
 					nameSize++;
@@ -146,6 +140,13 @@ public class EmailValidator {
 				if (nameSize > 50)
 					running = false;
 				break;
+				
+				
+				
+			default:
+				running = false;
+				break;
+				
 			}
 
 			if (running) {
@@ -189,14 +190,25 @@ public class EmailValidator {
 		switch (state) {
 		case 0:
 			// State 0 is not a final state, so we can return a very specific error message
-			emailRecognizerErrorMessage += "An email may only contain A-Z, a-z, or 0-9 before the @ .\n";
+			System.out.println("name size: " + nameSize);
+			if (nameSize < 2) {
+				// Name is too small
+				emailRecognizerErrorMessage += "The email is not long enough to be valid.\n";
+				return emailRecognizerErrorMessage;
+			} else if (nameSize > 64){
+				emailRecognizerErrorMessage += "The email local part (before the @) must be less than 65 characters.\n";
+				return emailRecognizerErrorMessage;
+			}
+			else 
+			emailRecognizerErrorMessage += "An email may only contain A-Z, a-z, 0-9 or special characters before the @. It must also contain an @ before the domain.\n";
 			return emailRecognizerErrorMessage;
 
 		case 1:
 			// State 1 is a final state. Check to see if the Name length is valid. If so
 			// we
 			// we must ensure the whole string has been consumed.
-			if (nameSize < 1) {
+			System.out.println("name size: " + nameSize);
+			if (nameSize < 2) {
 				// Name is too small
 				emailRecognizerErrorMessage += "The email is not long enough to be valid.\n";
 				return emailRecognizerErrorMessage;
@@ -206,7 +218,7 @@ public class EmailValidator {
 				return emailRecognizerErrorMessage;
 			} else if (currentCharNdx < input.length()) {
 				// There are characters remaining in the input, so the input is not valid
-				emailRecognizerErrorMessage += "After the first character, an email may only contain the characters A-Z, a-z, a @ or a period.\n";
+				emailRecognizerErrorMessage += "An email may only contain the characters A-Z, a-z, a @ or a period.\n";
 				return emailRecognizerErrorMessage;
 			} else {
 				// Name is valid
