@@ -34,7 +34,7 @@ public class SetupAccountPage {
 
 		// Input fields for userName, password, and invitation code
 		TextField userNameField = new TextField();
-		userNameField.setPromptText("Enter UserName");
+		userNameField.setPromptText("Enter Username");
 		userNameField.setMaxWidth(250);
 
 		TextField nameField = new TextField();
@@ -50,7 +50,7 @@ public class SetupAccountPage {
 		passwordField.setMaxWidth(250);
 
 		TextField inviteCodeField = new TextField();
-		inviteCodeField.setPromptText("Enter InvitationCode");
+		inviteCodeField.setPromptText("Enter Invitation Code");
 		inviteCodeField.setMaxWidth(250);
 
 		// Label to display error messages for invalid input or registration issues

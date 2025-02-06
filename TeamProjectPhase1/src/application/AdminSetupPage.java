@@ -32,7 +32,7 @@ public class AdminSetupPage {
 
 		// Input fields for account info
 		TextField userNameField = new TextField();
-		userNameField.setPromptText("Enter Admin userName");
+		userNameField.setPromptText("Enter Admin Username");
 		userNameField.setMaxWidth(250);
 
 		TextField nameField = new TextField();
@@ -40,7 +40,7 @@ public class AdminSetupPage {
 		nameField.setMaxWidth(250);
 
 		TextField emailField = new TextField();
-		emailField.setPromptText("Enter Admin email");
+		emailField.setPromptText("Enter Admin Email");
 		emailField.setMaxWidth(250);
 
 		PasswordField passwordField = new PasswordField();

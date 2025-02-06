@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import databasePart1.DatabaseHelper;
 import javafx.geometry.Pos;
@@ -29,24 +30,20 @@ public class RoleSelectPage {
 	 * @param primaryStage The primary stage where the scene will be displayed.
 	 */
 	public void show(Stage primaryStage) {
-		
-		// Label to display title to user
-		Label prompt = new Label("Select A Role");
-		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold;");
-		prompt.setAlignment(Pos.CENTER);
 
 		// Create Next and Back buttons
 		Button nextButton = new Button("Next");
+		nextButton.setStyle(
+				"-fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: black, gray; -fx-border-width: 2, 1;"
+						+ "-fx-border-radius: 6, 5; -fx-border-inset: 0, 4;");
+
 		Button quitButton = new Button("Back");
+		quitButton.setStyle(
+				"-fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: black, gray; -fx-border-width: 2, 1;"
+						+ "-fx-border-radius: 6, 5; -fx-border-inset: 0, 4;");
 
 		// Set nextButton to default to allow Enter button to activate
 		nextButton.setDefaultButton(true);
-
-		// Create layout for buttons and combobox
-		VBox layoutV = new VBox(10);
-		layoutV.setStyle("-fx-alignment: center; -fx-padding: 20;");
-		HBox layoutH = new HBox(10);
-		layoutH.setStyle("-fx-alignment: center; -fx-padding: 20;");
 
 		// Create combobox for selecting roles
 		ComboBox<String> comboBox = new ComboBox<>();
@@ -56,6 +53,8 @@ public class RoleSelectPage {
 
 		// Set default comboBox text
 		comboBox.setPromptText("Please select a role");
+		comboBox.setStyle("-fx-text-fill: black; -fx-font-weight: bold;-fx-border-color: black, gray;"
+				+ "-fx-border-width: 2, 1; -fx-border-radius: 3, 1; -fx-border-inset: 0, 4;");
 
 		// ComboBox allows selection of roles and deactivates Next button until
 		// selection
@@ -100,19 +99,6 @@ public class RoleSelectPage {
 			new UserLoginPage(databaseHelper).show(primaryStage);
 		});
 
-		// Attach nextButton and quitButton to the same container
-		layoutH.getChildren().addAll(nextButton, quitButton);
-
-		// Attach buttons and combobox to the same container
-		layoutV.getChildren().addAll(prompt, comboBox, layoutH);
-
-		// Create scene to hold UI objects
-		Scene roleSelectScene = new Scene(layoutV, 940, 400);
-
-		// Set the scene to primary stage
-		primaryStage.setScene(roleSelectScene);
-		primaryStage.setTitle("Role-Selection Page");
-
 		// Center the text in the dropdown list of the comboBox
 		comboBox.setCellFactory(a -> new ListCell<String>() {
 			@Override
@@ -140,5 +126,38 @@ public class RoleSelectPage {
 				}
 			}
 		});
+
+		// Label to display title to user
+		Label prompt = new Label("Role-Select");
+		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-font-weight: bold;");
+		prompt.setAlignment(Pos.CENTER);
+
+		// Create layout for buttons and combobox
+		VBox layoutV = new VBox(10);
+		layoutV.setMinSize(400, 220);
+		layoutV.setMaxSize(400, 220);
+		layoutV.setStyle("-fx-padding: 20; -fx-background-color: gray; -fx-background-radius: 100;"
+				+ "-fx-background-insets: 4; -fx-border-color: gray, gray, black;"
+				+ "-fx-border-width: 2, 2, 1; -fx-border-radius: 100, 100, 100;" + "-fx-border-insets: 0, 2, 4");
+		layoutV.setAlignment(Pos.CENTER);
+
+		HBox layoutH = new HBox(10);
+		layoutH.setStyle("-fx-padding: 20;");
+		layoutH.setAlignment(Pos.CENTER);
+
+		// Attach nextButton and quitButton to the same container
+		layoutH.getChildren().addAll(nextButton, quitButton);
+
+		// Attach buttons and combobox to the same container
+		layoutV.getChildren().addAll(prompt, comboBox, layoutH);
+
+		StackPane root = new StackPane(layoutV);
+
+		// Create scene to hold UI objects
+		Scene roleSelectScene = new Scene(root, 940, 400);
+
+		// Set the scene to primary stage
+		primaryStage.setScene(roleSelectScene);
+		primaryStage.setTitle("Role-Selection Page");
 	}
 }

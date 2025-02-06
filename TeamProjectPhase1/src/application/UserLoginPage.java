@@ -4,6 +4,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -66,24 +68,39 @@ public class UserLoginPage {
 	public void show(Stage primaryStage) {
 		// Input field for the user's userName, password
 		TextField userNameField = new TextField();
-		userNameField.setPromptText("Enter userName");
-		userNameField.setMaxWidth(250);
+		userNameField.setPromptText("Enter Username");
+		userNameField.setStyle("-fx-text-fill: black; -fx-font-weight: bold;-fx-border-color: black, gray;"
+				+ "-fx-border-width: 2, 1; -fx-border-radius: 3, 1; -fx-border-inset: 0, 4;");
+		userNameField.setMaxWidth(200);
+		userNameField.setAlignment(Pos.CENTER);
 
 		PasswordField passwordField = new PasswordField();
+		passwordField.setStyle("-fx-text-fill: black; -fx-font-weight: bold;-fx-border-color: black, gray;"
+				+ "-fx-border-width: 2, 1; -fx-border-radius: 3, 1; -fx-border-inset: 0, 4;");
 		passwordField.setPromptText("Enter Password");
-		passwordField.setMaxWidth(250);
-		
+		passwordField.setMaxWidth(200);
+		passwordField.setAlignment(Pos.CENTER);
+
 		// Label to display title to user
 		Label prompt = new Label("Login");
-		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold;");
+		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-font-weight: bold;");
 		prompt.setAlignment(Pos.CENTER);
 
 		// Label to display error messages
 		Label errorLabel = new Label();
-		errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+		errorLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 12px;");
 
+		// Button to login
 		Button loginButton = new Button("Login");
-		Button setupButton = new Button("Register New User");
+		loginButton.setStyle(
+				"-fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: black, gray; -fx-border-width: 2, 1;"
+						+ "-fx-border-radius: 6, 5; -fx-border-inset: 0, 4;");
+
+		// Button to register a new user
+		Button setupButton = new Button("New User");
+		setupButton.setStyle(
+				"-fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: black, gray; -fx-border-width: 2, 1;"
+						+ "-fx-border-radius: 6, 5; -fx-border-inset: 0, 4;");
 
 		// Set login button as default to allow pressing Enter to activate
 		loginButton.setDefaultButton(true);
@@ -97,24 +114,18 @@ public class UserLoginPage {
 			String passwordValidate = PasswordEvaluator.evaluatePassword(password);
 
 			if (!userNameValidate.isEmpty()) {
-				errorLabel.setText("***ERROR*** Invalid username");
+				errorLabel.setText("Invalid username");
 				return;
 			}
 
 			if (!passwordValidate.isEmpty()) {
-				errorLabel.setText("***ERROR*** Invalid password");
+				errorLabel.setText(" Invalid password");
 				return;
 			}
 
 			try {
 				User user = databaseHelper.login(userName, password);
 				System.out.println(user.toString());
-				
-				if (user == null) {
-					// Display an error if the login fails
-					errorLabel.setText("Error logging in. Contact an Administrator.");
-					return;
-				}
 
 				System.out.print("\n The otp value is " + user.getOTPFlag() + "\n");// debug
 
@@ -134,19 +145,30 @@ public class UserLoginPage {
 			} catch (SQLException e) {
 				System.err.println("Database error: " + e.getMessage());
 				e.printStackTrace();
-			}			
+			}
 		});
-		
+
 		// Button to register a new account
 		setupButton.setOnAction(a -> {
 			new SetupAccountPage(databaseHelper).show(primaryStage);
 		});
 
-		VBox layout = new VBox(10);
-		layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-		layout.getChildren().addAll(prompt, userNameField, passwordField, loginButton, setupButton, errorLabel);
+		HBox hbox = new HBox(5, loginButton, setupButton);
+		hbox.setAlignment(Pos.CENTER);
 
-		primaryStage.setScene(new Scene(layout, 940, 400));
+		// Container to hold UI elements in a nice border
+		VBox layout = new VBox(10);
+		layout.setMinSize(400, 220);
+		layout.setMaxSize(400, 220);
+		layout.setStyle("-fx-padding: 20; -fx-background-color: gray; -fx-background-radius: 100;"
+				+ "-fx-background-insets: 4; -fx-border-color: gray, gray, black;"
+				+ "-fx-border-width: 2, 2, 1; -fx-border-radius: 100, 100, 100;" + "-fx-border-insets: 0, 2, 4");
+		layout.getChildren().addAll(prompt, userNameField, passwordField, hbox, errorLabel);
+		layout.setAlignment(Pos.CENTER);
+
+		StackPane root = new StackPane(layout);
+
+		primaryStage.setScene(new Scene(root, 940, 400));
 		primaryStage.setTitle("User Login");
 		primaryStage.show();
 	}
