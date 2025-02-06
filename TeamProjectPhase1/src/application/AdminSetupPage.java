@@ -97,7 +97,7 @@ public class AdminSetupPage {
 				List<String> roles = new ArrayList<>();
 				roles.add("Admin");
 
-				User user = new User(userName, name, password, email, roles);
+				User user = new User(userName, name, password, email, roles, false);
 				databaseHelper.register(user);
 				System.out.println("Administrator setup completed.");
 

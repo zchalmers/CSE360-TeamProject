@@ -70,13 +70,14 @@ public class DatabaseHelper {
 
 	// Registers a new user in the database.
 	public void register(User user) throws SQLException {
-		String insertUser = "INSERT INTO cse360users (userName, name, password, email, roles) VALUES (?, ?, ?, ?, ?)";
+		String insertUser = "INSERT INTO cse360users (userName, name, password, email, roles, otp) VALUES (?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getName());
 			pstmt.setString(3, user.getPassword());
 			pstmt.setString(4, user.getEmail());
 			pstmt.setString(5, rolesSerial(user.getRoles()));
+			pstmt.setBoolean(6, user.getOTPFlag());
 			pstmt.executeUpdate();
 		}
 	}
@@ -129,7 +130,8 @@ public class DatabaseHelper {
 				String password = rs.getString("password");
 				String email = rs.getString("email");
 				List<String> roles = rolesDeserial(rs.getString("roles"));
-				return new User(username, name, password, email, roles);
+				boolean otp = rs.getBoolean("otp");								
+				return new User(username, name, password, email, roles, otp);
 			}
 		}
 		return null;
@@ -237,8 +239,8 @@ public class DatabaseHelper {
 				String password = rs.getString("password");
 				String email = rs.getString("email");
 				List<String> roles = rolesDeserial(rs.getString("roles"));
-
-				User user = new User(username, name, password, email, roles);
+				boolean otp = rs.getBoolean("otp");
+				User user = new User(username, name, password, email, roles, otp);
 				System.out.println("USERS: " + user.toString());
 				users.add(user);
 			}
@@ -248,7 +250,7 @@ public class DatabaseHelper {
 
 	// Validates a user's login credentials.
 	public User login(String username, String password) throws SQLException {
-		String query = "SELECT * FROM cse360users WHERE userName = ? AND (password = ? OR otp = TRUE) AND password <> ''";
+		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? AND password <> ''";
 		if (connection == null) {
 			connectToDatabase();
 			System.out.println("CONNECTIONCONNECTIONCONNECTION: " + connection.toString());	
@@ -257,7 +259,10 @@ public class DatabaseHelper {
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
-
+			
+			// Set currentUser since successful login at this point
+			currentUser = getUser(username);
+			
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					boolean otp = rs.getBoolean("otp");
@@ -276,7 +281,6 @@ public class DatabaseHelper {
 							updatepstmt.executeUpdate();							
 						}
 					}
-					currentUser = getUser(username);// debug
 					return currentUser;
 				}
 				return null;

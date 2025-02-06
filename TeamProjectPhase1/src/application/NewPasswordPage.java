@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.geometry.Pos;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
@@ -32,11 +33,16 @@ public class NewPasswordPage {
 		passwordField.setMaxWidth(250);
 
 		PasswordField passwordValidField = new PasswordField();
-		passwordValidField.setPromptText("Re-Enter New Password");
+		passwordValidField.setPromptText("Confirm New Password");
 		passwordValidField.setMaxWidth(250);
+		
+		// Label to display title to user
+		Label prompt = new Label("Password Reset");
+		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold;");
+		prompt.setAlignment(Pos.CENTER);
 
 		// Label to display error messages
-		Label errorLabel = new Label();
+		Label errorLabel = new Label("");
 		errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
 
 		Button saveChanges = new Button("Save");		
@@ -68,11 +74,10 @@ public class NewPasswordPage {
 				}
 			}			
 		});
-
 			
 		VBox layout = new VBox(10);
 		layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-		layout.getChildren().addAll(passwordField, passwordValidField, saveChanges, errorLabel);
+		layout.getChildren().addAll(prompt, passwordField, passwordValidField, saveChanges, errorLabel);
 
 		primaryStage.setScene(new Scene(layout, 940, 400));
 		primaryStage.setTitle("Password Change");

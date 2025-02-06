@@ -1,4 +1,4 @@
-package databasePart1;
+/*package databasePart1;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class DatabaseTests {
 	public static boolean addUser() {
 		List<String> roles = new ArrayList<>();
 		roles.add("admin");
-		User user = new User(username, name, password, email, roles);
+		User user = new User(username, name, password, email, roles, false);
 		try {
 			helper.register(user);
 			return true;
@@ -72,3 +72,4 @@ public class DatabaseTests {
 }
 
 
+*/

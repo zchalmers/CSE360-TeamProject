@@ -19,15 +19,16 @@ public class User {
 
 	// Constructor to initialize a new User object with userName, password, and
 	// role.
-	public User(String userName, String name, String password, String email, List<String> roles) {
+	public User(String userName, String name, String password, String email, List<String> roles, boolean otp) {
 		this.userName = userName;
 		this.name = name;
 		this.password = password;
 		this.email = email;
 		this.roles = roles;
+		this.otp = otp;
 	}
 
-	public User(String username, String name, String password, String email, String currentRole, List<String> roles) {
+	public User(String username, String name, String password, String email, String currentRole, List<String> roles, boolean otp) {
 
 	}
 

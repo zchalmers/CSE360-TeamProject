@@ -2,7 +2,6 @@ package application;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -30,6 +29,11 @@ public class RoleSelectPage {
 	 * @param primaryStage The primary stage where the scene will be displayed.
 	 */
 	public void show(Stage primaryStage) {
+		
+		// Label to display title to user
+		Label prompt = new Label("Select A Role");
+		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold;");
+		prompt.setAlignment(Pos.CENTER);
 
 		// Create Next and Back buttons
 		Button nextButton = new Button("Next");
@@ -39,7 +43,7 @@ public class RoleSelectPage {
 		nextButton.setDefaultButton(true);
 
 		// Create layout for buttons and combobox
-		VBox layoutV = new VBox();
+		VBox layoutV = new VBox(10);
 		layoutV.setStyle("-fx-alignment: center; -fx-padding: 20;");
 		HBox layoutH = new HBox(10);
 		layoutH.setStyle("-fx-alignment: center; -fx-padding: 20;");
@@ -100,7 +104,7 @@ public class RoleSelectPage {
 		layoutH.getChildren().addAll(nextButton, quitButton);
 
 		// Attach buttons and combobox to the same container
-		layoutV.getChildren().addAll(comboBox, layoutH);
+		layoutV.getChildren().addAll(prompt, comboBox, layoutH);
 
 		// Create scene to hold UI objects
 		Scene roleSelectScene = new Scene(layoutV, 940, 400);

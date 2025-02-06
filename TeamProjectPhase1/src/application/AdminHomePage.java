@@ -25,7 +25,6 @@ import javafx.beans.property.SimpleStringProperty;
 public class AdminHomePage {
 	/**
 	 * Displays the admin page in the provided primary stage.
-	 * 
 	 * @param primaryStage The primary stage where the scene will be displayed.
 	 */
 	private final DatabaseHelper databaseHelper;
@@ -37,6 +36,11 @@ public class AdminHomePage {
 	public void show(Stage primaryStage, User user) {
 		TableView<User> table = new TableView<>();
 		List<User> users = new ArrayList<>();
+		
+		// Label to display title to user
+		Label prompt = new Label("Welcome, Administrator!");
+		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold;");
+		prompt.setAlignment(Pos.CENTER);
 
 		try {
 			users = databaseHelper.getAllUsers();
@@ -281,7 +285,9 @@ public class AdminHomePage {
 		table.getColumns().add(tempPassword);
 
 		HBox hbox = new HBox(5, backButton, inviteButton);
-		VBox vbox = new VBox(table);
+		HBox header = new HBox(5, prompt);
+		header.setAlignment(Pos.CENTER);
+		VBox vbox = new VBox(header, table);
 		vbox.getChildren().addAll(hbox);
 		Scene scene = new Scene(vbox, 940, 400);
 		primaryStage.setScene(scene);

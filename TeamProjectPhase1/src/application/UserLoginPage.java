@@ -1,5 +1,6 @@
 package application;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -71,6 +72,11 @@ public class UserLoginPage {
 		PasswordField passwordField = new PasswordField();
 		passwordField.setPromptText("Enter Password");
 		passwordField.setMaxWidth(250);
+		
+		// Label to display title to user
+		Label prompt = new Label("Login");
+		prompt.setStyle("-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold;");
+		prompt.setAlignment(Pos.CENTER);
 
 		// Label to display error messages
 		Label errorLabel = new Label();
@@ -128,7 +134,7 @@ public class UserLoginPage {
 			} catch (SQLException e) {
 				System.err.println("Database error: " + e.getMessage());
 				e.printStackTrace();
-			}
+			}			
 		});
 		
 		// Button to register a new account
@@ -138,7 +144,7 @@ public class UserLoginPage {
 
 		VBox layout = new VBox(10);
 		layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-		layout.getChildren().addAll(userNameField, passwordField, loginButton, setupButton, errorLabel);
+		layout.getChildren().addAll(prompt, userNameField, passwordField, loginButton, setupButton, errorLabel);
 
 		primaryStage.setScene(new Scene(layout, 940, 400));
 		primaryStage.setTitle("User Login");
