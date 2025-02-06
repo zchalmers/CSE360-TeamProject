@@ -85,7 +85,7 @@ public class AdminHomePage {
 		// Create inviteButton for admin to generate invitation codes
 		Button inviteButton = new Button("Invite");
 		inviteButton.setOnAction(a -> {
-			new InvitationPage().show(databaseHelper, primaryStage);
+			new InvitationPage(databaseHelper).show(primaryStage);
 		});
 
 		TableColumn<User, Void> deleteColumn = new TableColumn<>("Delete User");

@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -12,6 +13,12 @@ import javafx.stage.Stage;
  * invitation code. The invitation code is displayed upon clicking a button.
  */
 public class InvitationPage {
+	
+	private final DatabaseHelper databaseHelper;
+
+	public InvitationPage(DatabaseHelper databaseHelper) {
+		this.databaseHelper = databaseHelper;
+	}
 	/**
 	 * Displays the Invite Page in the provided primary stage.
 	 * 
@@ -19,9 +26,11 @@ public class InvitationPage {
 	 *                       operations.
 	 * @param primaryStage   The primary stage where the scene will be displayed.
 	 */
-	public void show(DatabaseHelper databaseHelper, Stage primaryStage) {
+	public void show(Stage primaryStage) {
 		VBox layout = new VBox(10);
+		HBox hbox = new HBox(5);
 		layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
+		hbox.setStyle("-fx-alignment: center; -fx-padding: 20;");
 
 		// Label to display the title of the page
 		Label userLabel = new Label("Invite ");
@@ -35,6 +44,9 @@ public class InvitationPage {
 
 		// Button to return to login screen
 		Button quitButton = new Button("Back to Login");
+		
+		// Button to return to login screen
+		Button homeButton = new Button("Home");
 
 		// Label to display the generated invitation code
 		Label inviteCodeLabel = new Label("");
@@ -50,8 +62,13 @@ public class InvitationPage {
 		quitButton.setOnAction(a -> {
 			new UserLoginPage(databaseHelper).show(primaryStage);
 		});
-
-		layout.getChildren().addAll(userLabel, showCodeButton, inviteCodeLabel, quitButton);
+		
+		homeButton.setOnAction(a -> {
+			new AdminHomePage(databaseHelper).show(primaryStage, databaseHelper.currentUser);
+		});
+		
+		hbox.getChildren().addAll(homeButton, quitButton);
+		layout.getChildren().addAll(userLabel, showCodeButton, inviteCodeLabel, hbox);
 		Scene inviteScene = new Scene(layout, 940, 400);
 
 		// Set the scene to primary stage
