@@ -100,7 +100,7 @@ public class EmailValidator {
 				// the FSM goes to state 1
 
 				// A-Z, ', - -> State 1
-				if (currentChar == '@' && nameSize > 1 && nameSize < 65) {
+				if (currentChar == '@' && nameSize > 0 && nameSize < 65) {
 					nextState = 1;
 					// Count the character
 					nameSize++;
