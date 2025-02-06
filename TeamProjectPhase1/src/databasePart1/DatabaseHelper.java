@@ -334,7 +334,7 @@ public class DatabaseHelper {
 	}
 
 	public String generateOneTimePassword() {
-		String special = "~`!@#$%^&*()_-+={}[]|\\\\:;\\\"'<>,.?/";
+		String special = "~`!@#$%^&*()_-+{}[]|:,.?/";
 		String num = "0123456789";
 		String lower = "abcdefghijklmnopqrstuvwxyz";
 		String upper = lower.toUpperCase();

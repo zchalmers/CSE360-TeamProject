@@ -102,7 +102,8 @@ public class UserLoginPage {
 
 			try {
 				User user = databaseHelper.login(userName, password);
-
+				System.out.println(user.toString());
+				
 				if (user == null) {
 					// Display an error if the login fails
 					errorLabel.setText("Error logging in. Contact an Administrator.");
@@ -114,6 +115,7 @@ public class UserLoginPage {
 				if (user.getOTPFlag()) {
 					System.out.print("Your if statement works\n");// debug
 					new NewPasswordPage(databaseHelper).show(primaryStage, user);
+					return;
 				}
 
 				// If user has more than one role, send them to RoleSelectPage otherwise call
