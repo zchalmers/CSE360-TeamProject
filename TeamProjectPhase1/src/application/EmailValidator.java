@@ -189,7 +189,7 @@ public class EmailValidator {
 		switch (state) {
 		case 0:
 			// State 0 is not a final state, so we can return a very specific error message
-			emailRecognizerErrorMessage += "An email may only contain A-Z, a-z, or 0-9 or those before the @ .\n";
+			emailRecognizerErrorMessage += "An email may only contain A-Z, a-z, or 0-9 before the @ .\n";
 			return emailRecognizerErrorMessage;
 
 		case 1:

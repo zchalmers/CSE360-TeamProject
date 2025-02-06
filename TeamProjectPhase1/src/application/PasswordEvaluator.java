@@ -91,7 +91,7 @@ public class PasswordEvaluator {
 			} else if (currentChar >= '0' && currentChar <= '9') { // Check for 0-9
 				System.out.println("Digit found");
 				foundNumericDigit = true;
-			} else if ("~`!@#$%^&*()_-+={}[]|\\:;\"'<>,.?/".indexOf(currentChar) >= 0) { // Check for
+			} else if ("~`!@#$%^&*()_-+{}[]|:,.?/".indexOf(currentChar) >= 0) { // Check for
 				System.out.println("Special character found"); // special char
 				foundSpecialChar = true;
 			} else {
