@@ -37,7 +37,7 @@ public class DatabaseHelper {
 
 			statement = connection.createStatement();
 			// You can use this command to clear the database and restart from fresh.
-			statement.execute("DROP ALL OBJECTS");
+			// statement.execute("DROP ALL OBJECTS");
 			// System.out.println("Database cleared successfully.");
 
 			createTables();
