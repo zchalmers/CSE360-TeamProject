@@ -12,10 +12,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.input.ClipboardContent;
 
 /**
  * AdminPage class represents the user interface for the admin user. This page
@@ -220,6 +222,10 @@ public class AdminHomePage {
 				}
 			}
 		});
+		
+		// Enable pushing to users clipboard for copy/paste functionality
+		Clipboard clipboard = Clipboard.getSystemClipboard();
+		ClipboardContent content = new ClipboardContent();
 
 		// Add and populate Forgot Password column
 		TableColumn<User, Void> tempPassword = new TableColumn<>("Forgot Password");
@@ -260,6 +266,11 @@ public class AdminHomePage {
 							if (finalResult.isPresent() && finalResult.get() == ButtonType.OK) {
 								user.setPassword(OTP);
 								databaseHelper.updatePassword(user.getUsername(), OTP);
+								
+								// Push OTP to users clipboard so they may easily copy/paste
+								content.putString(OTP);
+								clipboard.setContent(content);
+								
 								user.setOTPFlag(true);
 								databaseHelper.updateOTPFlag(user.getUsername(), true);
 								System.out.println(user.getPassword()); // Debug
